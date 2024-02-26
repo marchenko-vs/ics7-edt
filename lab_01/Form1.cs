@@ -27,11 +27,11 @@ namespace queuing_system
         {
             listGenerator.View = View.Details;
 
-            listGenerator.Columns.Add("Интенсивность поступления, 1/с");
-            listGenerator.Columns.Add("Разброс поступления, 1/с");
+            listGenerator.Columns.Add("Интенсивность, 1/с");
+            listGenerator.Columns.Add("Разброс, 1/с");
 
-            listGenerator.Columns[0].Width = 450;
-            listGenerator.Columns[1].Width = 450;
+            listGenerator.Columns[0].Width = 250;
+            listGenerator.Columns[1].Width = 250;
 
             listGenerator.Font = new Font("Arial", 14);
 
@@ -42,11 +42,11 @@ namespace queuing_system
         {
             listOperator.View = View.Details;
 
-            listOperator.Columns.Add("Интенсивность обслуживания, 1/с");
-            listOperator.Columns.Add("Разброс обслуживания, 1/с");
+            listOperator.Columns.Add("Интенсивность, 1/с");
+            listOperator.Columns.Add("Разброс, 1/с");
 
-            listOperator.Columns[0].Width = 450;
-            listOperator.Columns[1].Width = 450;
+            listOperator.Columns[0].Width = 250;
+            listOperator.Columns[1].Width = 250;
 
             listOperator.Font = new Font("Arial", 14);
 
@@ -98,6 +98,18 @@ namespace queuing_system
             }
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (listOperator.SelectedItems.Count > 0)
+            {
+                listOperator.SelectedItems[0].Remove();
+            }
+            else
+            {
+                MessageBox.Show("Пожалуйста, выберите элемент для удаления.");
+            }
+        }
+
         private void button4_Click(object sender, EventArgs e)
         {
             double intensity = readDouble(textBoxOperatorMean);
@@ -109,18 +121,6 @@ namespace queuing_system
             });
 
             listOperator.Items.Add(item);
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            if (listOperator.SelectedItems.Count > 0)
-            {
-                listOperator.SelectedItems[0].Remove();
-            }
-            else
-            {
-                MessageBox.Show("Пожалуйста, выберите элемент для удаления.");
-            }
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -152,7 +152,7 @@ namespace queuing_system
                 operatingDevices.Add(new Operator(mean, spread));
             }
 
-            double time = readDouble(textBox3);
+            double time = readDouble(textBoxModellingTime);
 
             if (generators.Count == 0 || operatingDevices.Count == 0)
             {
@@ -188,8 +188,9 @@ namespace queuing_system
             double operatingDeviceIntensityMin = readDouble(textBox8);
             double operatingDeviceIntensityMax = readDouble(textBox9);
             double operatingDeviceIntensityStep = readDouble(textBox14);
+            double operatingDeviceSpread = readDouble(textBox19);
 
-            double time = readDouble(textBox3);
+            double time = readDouble(textBoxModellingTime);
 
             chart1.Series.Clear();
             chart1.Series.Add(new Series("operatingIntensity"));
@@ -208,16 +209,19 @@ namespace queuing_system
             chart2.ChartAreas[0].AxisX.Title = "Загрузка";
             chart2.ChartAreas[0].AxisY.Title = "Время ожидания в очереди, с";
             chart2.Legends.Clear();
+
             for (double i = operatingDeviceIntensityMin; i <= operatingDeviceIntensityMax; i += operatingDeviceIntensityStep)
             {
                 double meanWaitingTime = 0;
                 int iterations = 100;
+
                 for (int j = 0; j < iterations; ++j)
                 {
-                    Generator generator = new Generator(generatorIntensity, generatorSpread);
-                    Operator operatingDevice = new Operator(i, 0);
+                    Generator generator = new Generator(1 / generatorIntensity, 1 / generatorSpread);
+                    Operator operatingDevice = new Operator(1 / i, 1 / operatingDeviceSpread);
 
                     QueuingSystem queuingSystem = new QueuingSystem(generator, operatingDevice);
+
                     queuingSystem.simulate(time);
                     meanWaitingTime += queuingSystem.meanWaitingTime;
                 }
@@ -234,9 +238,10 @@ namespace queuing_system
             double generatorIntensityStep = readDouble(textBox15);
             double generatorSpread = readDouble(textBox11);
 
-            double operatingDeviceIntensity = readDouble(textBox12);
+            double operatorIntensity = readDouble(textBox12);
+            double operatorIntensitySpread = readDouble(textBox20);
 
-            double time = readDouble(textBox3);
+            double time = readDouble(textBoxModellingTime);
 
             chart4.Series.Clear();
             chart4.Series.Add(new Series("generatorIntensity"));
@@ -255,16 +260,16 @@ namespace queuing_system
             chart3.ChartAreas[0].AxisX.Title = "Загрузка";
             chart3.ChartAreas[0].AxisY.Title = "Время ожидания в очереди, с";
             chart3.Legends.Clear();
+
             for (double i = generatorIntensityMin; i <= generatorIntensityMax; i += generatorIntensityStep)
             {
                 double meanWaitingTime = 0;
                 int iterations = 100;
+
                 for (int j = 0; j < iterations; ++j)
                 {
-                    double mean = 1 / i;
-                    double spread = generatorSpread;
-                    Generator generator = new Generator(mean, spread);
-                    Operator operatingDevice = new Operator(operatingDeviceIntensity, 0);
+                    Generator generator = new Generator(1 / i, 1 / generatorSpread);
+                    Operator operatingDevice = new Operator(1 / operatorIntensity, 1 / operatorIntensitySpread);
 
                     QueuingSystem queuingSystem = new QueuingSystem(generator, operatingDevice);
                     queuingSystem.simulate(time);
@@ -272,7 +277,7 @@ namespace queuing_system
                 }
 
                 chart4.Series["generatorIntensity"].Points.AddXY(i, meanWaitingTime / iterations);
-                chart3.Series["workloadGeneratingIntensity"].Points.AddXY(Math.Round(i / operatingDeviceIntensity, 3), meanWaitingTime / iterations);
+                chart3.Series["workloadGeneratingIntensity"].Points.AddXY(Math.Round(i / operatorIntensity, 3), meanWaitingTime / iterations);
             }
         }
     }

@@ -33,23 +33,23 @@
             listGenerator = new ListView();
             labelGenerator = new Label();
             contextMenuStrip1 = new ContextMenuStrip(components);
-            label2 = new Label();
+            labelGeneratorMean = new Label();
             textBoxGeneratorMean = new TextBox();
             btnAddGenerator = new Button();
-            label3 = new Label();
+            labelGeneratorDerivation = new Label();
             textBoxGeneratorDerivation = new TextBox();
-            label4 = new Label();
-            deleteGenerator = new Button();
-            deleteOperator = new Button();
-            label5 = new Label();
+            labelUniform = new Label();
+            btnDeleteGenerator = new Button();
+            btnDeleteOperator = new Button();
+            labelNormal = new Label();
             btnAddOperator = new Button();
             textBoxOperatorMean = new TextBox();
             labelOperatorMean = new Label();
-            label8 = new Label();
+            labelOperator = new Label();
             listOperator = new ListView();
             btnStartModelling = new Button();
-            textBox3 = new TextBox();
-            label6 = new Label();
+            textBoxModellingTime = new TextBox();
+            labelModellingTime = new Label();
             textBoxTheorWorkload = new TextBox();
             label9 = new Label();
             textBoxActualWorkload = new TextBox();
@@ -84,8 +84,13 @@
             label22 = new Label();
             label23 = new Label();
             textBox18 = new TextBox();
-            label24 = new Label();
+            textBox19 = new TextBox();
+            textBox20 = new TextBox();
+            
             label17 = new Label();
+            label24 = new Label();
+            label25 = new Label();
+            label26 = new Label();
             
             chart3 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             chart4 = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -97,360 +102,345 @@
             
             SuspendLayout();
 
-            listGenerator.Location = new Point(16, 312);
-            listGenerator.Name = "listGenerator";
-            listGenerator.Size = new Size(944, 216);
-            listGenerator.TabIndex = 0;
-            listGenerator.UseCompatibleStateImageBehavior = false;
-
             labelGenerator.AutoSize = true;
-            labelGenerator.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point);
-            labelGenerator.Location = new Point(8, 8);
+            labelGenerator.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
+            labelGenerator.Location = new Point(10, 8);
             labelGenerator.Name = "labelGenerator";
-            labelGenerator.Size = new Size(192, 48);
+            labelGenerator.Size = new Size(190, 45);
             labelGenerator.TabIndex = 1;
             labelGenerator.Text = "Генератор";
+
+            labelUniform.AutoSize = true;
+            labelUniform.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            labelUniform.Location = new Point(10, 50);
+            labelUniform.Name = "labelUniform";
+            labelUniform.Size = new Size(442, 45);
+            labelUniform.TabIndex = 8;
+            labelUniform.Text = "Равномерное распределение";
 
             contextMenuStrip1.ImageScalingSize = new Size(24, 24);
             contextMenuStrip1.Name = "contextMenuStrip1";
             contextMenuStrip1.Size = new Size(61, 4);
 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label2.Location = new Point(16, 120);
-            label2.Name = "label2";
-            label2.Size = new Size(302, 45);
-            label2.TabIndex = 3;
-            label2.Text = "Интенсивность, 1/c";
+            labelGeneratorMean.AutoSize = true;
+            labelGeneratorMean.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            labelGeneratorMean.Location = new Point(10, 90);
+            labelGeneratorMean.Name = "labelGeneratorMean";
+            labelGeneratorMean.Size = new Size(302, 45);
+            labelGeneratorMean.TabIndex = 3;
+            labelGeneratorMean.Text = "Интенсивность, 1/c";
 
-            textBoxGeneratorMean.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            textBoxGeneratorMean.Location = new Point(464, 120);
+            textBoxGeneratorMean.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxGeneratorMean.Location = new Point(460, 90);
             textBoxGeneratorMean.Name = "textBoxGeneratorMean";
-            textBoxGeneratorMean.Size = new Size(176, 50);
+            textBoxGeneratorMean.Size = new Size(176, 40);
             textBoxGeneratorMean.TabIndex = 4;
             textBoxGeneratorMean.Text = "0,1";
 
-            btnAddGenerator.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            btnAddGenerator.Location = new Point(464, 240);
+            labelGeneratorDerivation.AutoSize = true;
+            labelGeneratorDerivation.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            labelGeneratorDerivation.Location = new Point(10, 130);
+            labelGeneratorDerivation.Name = "labelGeneratorDerivation";
+            labelGeneratorDerivation.Size = new Size(429, 45);
+            labelGeneratorDerivation.TabIndex = 6;
+            labelGeneratorDerivation.Text = "Разброс интенсивности, 1/c";
+
+            textBoxGeneratorDerivation.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxGeneratorDerivation.Location = new Point(460, 130);
+            textBoxGeneratorDerivation.Name = "textBoxGeneratorDerivation";
+            textBoxGeneratorDerivation.Size = new Size(176, 40);
+            textBoxGeneratorDerivation.TabIndex = 7;
+            textBoxGeneratorDerivation.Text = "0,5";
+
+            btnDeleteGenerator.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            btnDeleteGenerator.Location = new Point(10, 170);
+            btnDeleteGenerator.Name = "btnDeleteGenerator";
+            btnDeleteGenerator.Size = new Size(180, 50);
+            btnDeleteGenerator.TabIndex = 9;
+            btnDeleteGenerator.Text = "Удалить";
+            btnDeleteGenerator.UseVisualStyleBackColor = true;
+            btnDeleteGenerator.Click += button2_Click;
+
+            btnAddGenerator.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            btnAddGenerator.Location = new Point(300, 170);
             btnAddGenerator.Name = "btnAddGenerator";
-            btnAddGenerator.Size = new Size(176, 64);
+            btnAddGenerator.Size = new Size(180, 50);
             btnAddGenerator.TabIndex = 5;
             btnAddGenerator.Text = "Добавить";
             btnAddGenerator.UseVisualStyleBackColor = true;
             btnAddGenerator.Click += button1_Click;
 
-            label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label3.Location = new Point(16, 184);
-            label3.Name = "label3";
-            label3.Size = new Size(429, 45);
-            label3.TabIndex = 6;
-            label3.Text = "Разброс интенсивности, 1/c";
-            // 
-            // textBoxGeneratorDerivation
-            // 
-            textBoxGeneratorDerivation.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            textBoxGeneratorDerivation.Location = new Point(464, 184);
-            textBoxGeneratorDerivation.Name = "textBoxGeneratorDerivation";
-            textBoxGeneratorDerivation.Size = new Size(176, 50);
-            textBoxGeneratorDerivation.TabIndex = 7;
-            textBoxGeneratorDerivation.Text = "0,5";
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label4.Location = new Point(16, 64);
-            label4.Name = "label4";
-            label4.Size = new Size(442, 45);
-            label4.TabIndex = 8;
-            label4.Text = "Равномерное распределение";
+            listGenerator.Location = new Point(10, 230);
+            listGenerator.Name = "listGenerator";
+            listGenerator.Size = new Size(650, 200);
+            listGenerator.TabIndex = 0;
+            listGenerator.UseCompatibleStateImageBehavior = false;
 
-            deleteGenerator.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            deleteGenerator.Location = new Point(16, 240);
-            deleteGenerator.Name = "deleteGenerator";
-            deleteGenerator.Size = new Size(432, 64);
-            deleteGenerator.TabIndex = 9;
-            deleteGenerator.Text = "Удалить выделенное";
-            deleteGenerator.UseVisualStyleBackColor = true;
-            deleteGenerator.Click += button2_Click;
+            labelOperator.AutoSize = true;
+            labelOperator.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
+            labelOperator.Location = new Point(10, 460);
+            labelOperator.Name = "labelOperator";
+            labelOperator.Size = new Size(449, 48);
+            labelOperator.TabIndex = 11;
+            labelOperator.Text = "Обслуживающий аппарат";
 
-            deleteOperator.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            deleteOperator.Location = new Point(24, 750);
-            deleteOperator.Name = "deleteOperator";
-            deleteOperator.Size = new Size(392, 64);
-            deleteOperator.TabIndex = 18;
-            deleteOperator.Text = "Удалить выделенное";
-            deleteOperator.UseVisualStyleBackColor = true;
-            deleteOperator.Click += button3_Click;
-
-            label5.AutoSize = true;
-            label5.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label5.Location = new Point(24, 592);
-            label5.Name = "label5";
-            label5.Size = new Size(538, 45);
-            label5.TabIndex = 17;
-            label5.Text = "Нормальное распределение";
-
-            btnAddOperator.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            btnAddOperator.Location = new Point(432, 750);
-            btnAddOperator.Name = "btnAddOperator";
-            btnAddOperator.Size = new Size(216, 64);
-            btnAddOperator.TabIndex = 14;
-            btnAddOperator.Text = "Добавить";
-            btnAddOperator.UseVisualStyleBackColor = true;
-            btnAddOperator.Click += button4_Click;
+            labelNormal.AutoSize = true;
+            labelNormal.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            labelNormal.Location = new Point(10, 500);
+            labelNormal.Name = "labelNormal";
+            labelNormal.Size = new Size(538, 45);
+            labelNormal.TabIndex = 17;
+            labelNormal.Text = "Нормальное распределение";
 
             labelOperatorMean.AutoSize = true;
-            labelOperatorMean.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            labelOperatorMean.Location = new Point(24, 648);
+            labelOperatorMean.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            labelOperatorMean.Location = new Point(10, 540);
             labelOperatorMean.Name = "labelOperatorMean";
             labelOperatorMean.Size = new Size(302, 45);
             labelOperatorMean.TabIndex = 12;
             labelOperatorMean.Text = "Интенсивность, 1/c";
 
-            textBoxOperatorMean.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            textBoxOperatorMean.Location = new Point(472, 648);
+            textBoxOperatorMean.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxOperatorMean.Location = new Point(460, 540);
             textBoxOperatorMean.Name = "textBoxOperatorMean";
             textBoxOperatorMean.Size = new Size(176, 50);
             textBoxOperatorMean.TabIndex = 13;
             textBoxOperatorMean.Text = "0,08";
             
             labelOperatorDerivation.AutoSize = true;
-            labelOperatorDerivation.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            labelOperatorDerivation.Location = new Point(24, 700);
+            labelOperatorDerivation.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            labelOperatorDerivation.Location = new Point(10, 580);
             labelOperatorDerivation.Name = "labelOperatorDerivation";
             labelOperatorDerivation.Size = new Size(429, 45);
             labelOperatorDerivation.TabIndex = 12;
             labelOperatorDerivation.Text = "Разброс интенсивности, 1/c";
 
-            textBoxOperatorDerivation.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            textBoxOperatorDerivation.Location = new Point(24, 760);
+            textBoxOperatorDerivation.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxOperatorDerivation.Location = new Point(460, 580);
             textBoxOperatorDerivation.Name = "textBoxOperatorDerivation";
             textBoxOperatorDerivation.Size = new Size(176, 50);
             textBoxOperatorDerivation.TabIndex = 7;
             textBoxOperatorDerivation.Text = "0,5";
 
-            label8.AutoSize = true;
-            label8.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point);
-            label8.Location = new Point(16, 536);
-            label8.Name = "label8";
-            label8.Size = new Size(449, 48);
-            label8.TabIndex = 11;
-            label8.Text = "Обслуживающий аппарат";
+            btnDeleteOperator.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            btnDeleteOperator.Location = new Point(10, 620);
+            btnDeleteOperator.Name = "btnDeleteOperator";
+            btnDeleteOperator.Size = new Size(180, 50);
+            btnDeleteOperator.TabIndex = 18;
+            btnDeleteOperator.Text = "Удалить";
+            btnDeleteOperator.UseVisualStyleBackColor = true;
+            btnDeleteOperator.Click += button3_Click;
 
-            listOperator.Location = new Point(24, 800);
+            btnAddOperator.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            btnAddOperator.Location = new Point(432, 620);
+            btnAddOperator.Name = "btnAddOperator";
+            btnAddOperator.Size = new Size(180, 50);
+            btnAddOperator.TabIndex = 14;
+            btnAddOperator.Text = "Добавить";
+            btnAddOperator.UseVisualStyleBackColor = true;
+            btnAddOperator.Click += button4_Click;
+
+            listOperator.Location = new Point(10, 670);
             listOperator.Name = "listOperator";
-            listOperator.Size = new Size(944, 232);
+            listOperator.Size = new Size(650, 200);
             listOperator.TabIndex = 10;
             listOperator.UseCompatibleStateImageBehavior = false;
 
-            btnStartModelling.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            btnStartModelling.Location = new Point(32, 1080);
+            labelModellingTime.AutoSize = true;
+            labelModellingTime.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            labelModellingTime.Location = new Point(10, 900);
+            labelModellingTime.Name = "labelModellingTime";
+            labelModellingTime.Size = new Size(388, 45);
+            labelModellingTime.TabIndex = 19;
+            labelModellingTime.Text = "Время моделирования, с";
+
+            textBoxModellingTime.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxModellingTime.Location = new Point(420, 900);
+            textBoxModellingTime.Name = "textBoxModellingTime";
+            textBoxModellingTime.Size = new Size(216, 50);
+            textBoxModellingTime.TabIndex = 20;
+            textBoxModellingTime.Text = "1000";
+
+            btnStartModelling.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            btnStartModelling.Location = new Point(10, 960);
             btnStartModelling.Name = "btnStartModelling";
-            btnStartModelling.Size = new Size(616, 64);
+            btnStartModelling.Size = new Size(650, 50);
             btnStartModelling.TabIndex = 21;
             btnStartModelling.Text = "Моделировать";
             btnStartModelling.UseVisualStyleBackColor = true;
             btnStartModelling.Click += button5_Click;
 
-            textBox3.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            textBox3.Location = new Point(432, 1024);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(216, 50);
-            textBox3.TabIndex = 20;
-            textBox3.Text = "1000";
+            label9.AutoSize = true;
+            label9.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            label9.Location = new Point(10, 1020);
+            label9.Name = "label9";
+            label9.Size = new Size(431, 45);
+            label9.TabIndex = 22;
+            label9.Text = "Расчетная загрузка системы";
 
-            label6.AutoSize = true;
-            label6.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label6.Location = new Point(24, 1024);
-            label6.Name = "label6";
-            label6.Size = new Size(388, 45);
-            label6.TabIndex = 19;
-            label6.Text = "Время моделирования, с";
-
-            textBoxTheorWorkload.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            textBoxTheorWorkload.Location = new Point(512, 1144);
+            textBoxTheorWorkload.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxTheorWorkload.Location = new Point(512, 1020);
             textBoxTheorWorkload.Name = "textBoxTheorWorkload";
             textBoxTheorWorkload.ReadOnly = true;
             textBoxTheorWorkload.Size = new Size(136, 50);
             textBoxTheorWorkload.TabIndex = 23;
 
-            label9.AutoSize = true;
-            label9.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label9.Location = new Point(32, 1152);
-            label9.Name = "label9";
-            label9.Size = new Size(431, 45);
-            label9.TabIndex = 22;
-            label9.Text = "Расчетная загрузка системы";
-            // 
-            // textBoxActualWorkload
-            // 
-            textBoxActualWorkload.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            textBoxActualWorkload.Location = new Point(512, 1200);
-            textBoxActualWorkload.Name = "textBoxActualWorkload";
-            textBoxActualWorkload.ReadOnly = true;
-            textBoxActualWorkload.Size = new Size(136, 50);
-            textBoxActualWorkload.TabIndex = 25;
-            // 
-            // label10
-            // 
             label10.AutoSize = true;
-            label10.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label10.Location = new Point(32, 1208);
+            label10.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            label10.Location = new Point(10, 1080);
             label10.Name = "label10";
             label10.Size = new Size(469, 45);
             label10.TabIndex = 24;
             label10.Text = "Фактическая загрузка системы";
-            // 
-            // splitter1
-            // 
-            splitter1.Location = new Point(0, 0);
-            splitter1.Name = "splitter1";
-            splitter1.Size = new Size(4, 1324);
-            splitter1.TabIndex = 26;
-            splitter1.TabStop = false;
-            // 
-            // splitter2
-            // 
-            splitter2.Location = new Point(4, 0);
-            splitter2.Name = "splitter2";
-            splitter2.Size = new Size(4, 1324);
-            splitter2.TabIndex = 27;
-            splitter2.TabStop = false;
-            // 
-            // label11
-            // 
+
+            textBoxActualWorkload.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxActualWorkload.Location = new Point(512, 1080);
+            textBoxActualWorkload.Name = "textBoxActualWorkload";
+            textBoxActualWorkload.ReadOnly = true;
+            textBoxActualWorkload.Size = new Size(136, 50);
+            textBoxActualWorkload.TabIndex = 25;
+
+            // splitter1.Location = new Point(0, 0);
+            // splitter1.Name = "splitter1";
+            // splitter1.Size = new Size(4, 1080);
+            // splitter1.TabIndex = 26;
+            // splitter1.TabStop = false;
+
+            // splitter2.Location = new Point(4, 0);
+            // splitter2.Name = "splitter2";
+            // splitter2.Size = new Size(4, 1140);
+            // splitter2.TabIndex = 27;
+            // splitter2.TabStop = false;
+
             label11.AutoSize = true;
-            label11.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label11.Location = new Point(32, 1264);
+            label11.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            label11.Location = new Point(10, 1140);
             label11.Name = "label11";
             label11.Size = new Size(435, 45);
             label11.TabIndex = 28;
             label11.Text = "Среднее время ожидания, с";
-            // 
-            // textBoxMeanWaitTime
-            // 
-            textBoxMeanWaitTime.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            textBoxMeanWaitTime.Location = new Point(512, 1256);
+
+            textBoxMeanWaitTime.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxMeanWaitTime.Location = new Point(512, 1140);
             textBoxMeanWaitTime.Name = "textBoxMeanWaitTime";
             textBoxMeanWaitTime.ReadOnly = true;
             textBoxMeanWaitTime.Size = new Size(136, 50);
             textBoxMeanWaitTime.TabIndex = 29;
-            // 
-            // textBox8
-            // 
-            textBox8.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            textBox8.Location = new Point(1632, 64);
-            textBox8.Name = "textBox8";
-            textBox8.Size = new Size(104, 50);
-            textBox8.TabIndex = 34;
-            textBox8.Text = "1,1";
-            // 
-            // label12
-            // 
+
+            // experiment
+
             label12.AutoSize = true;
-            label12.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label12.Location = new Point(960, 8);
+            label12.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            label12.Location = new Point(750, 10);
             label12.Name = "label12";
-            label12.Size = new Size(603, 45);
+            label12.Size = new Size(600, 45);
             label12.TabIndex = 33;
             label12.Text = "Интенсивность поступления заявок, 1/c";
-            // 
-            // label13
-            // 
+
+            textBox17.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            textBox17.Location = new Point(1375, 10);
+            textBox17.Name = "textBox17";
+            textBox17.Size = new Size(112, 40);
+            textBox17.TabIndex = 66;
+            textBox17.Text = "0,1";
+
+            label19.AutoSize = true;
+            label19.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            label19.Location = new Point(1550, 10);
+            label19.Name = "label19";
+            label19.Size = new Size(140, 45);
+            label19.TabIndex = 82;
+            label19.Text = "Разброс, 1/c";
+
+            textBox13.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            textBox13.Location = new Point(1750, 10);
+            textBox13.Name = "textBox13";
+            textBox13.Size = new Size(112, 50);
+            textBox13.TabIndex = 83;
+            textBox13.Text = "0,5";
+
+            label20.AutoSize = true;
+            label20.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            label20.Location = new Point(750, 60);
+            label20.Name = "label20";
+            label20.Size = new Size(577, 45);
+            label20.TabIndex = 89;
+            label20.Text = "Интенсивность обработки заявок, 1/c";
+
             label13.AutoSize = true;
-            label13.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label13.Location = new Point(1552, 64);
+            label13.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            label13.Location = new Point(1375, 60);
             label13.Name = "label13";
             label13.Size = new Size(57, 45);
             label13.TabIndex = 35;
             label13.Text = "От";
-            // 
-            // label14
-            // 
+
+            textBox8.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            textBox8.Location = new Point(1450, 60);
+            textBox8.Name = "textBox8";
+            textBox8.Size = new Size(104, 50);
+            textBox8.TabIndex = 34;
+            textBox8.Text = "0,01";
+
             label14.AutoSize = true;
-            label14.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label14.Location = new Point(1744, 64);
+            label14.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            label14.Location = new Point(1600, 60);
             label14.Name = "label14";
             label14.Size = new Size(61, 45);
             label14.TabIndex = 36;
             label14.Text = "До";
-            // 
-            // textBox9
-            // 
-            textBox9.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            textBox9.Location = new Point(1824, 64);
+
+            textBox9.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            textBox9.Location = new Point(1700, 60);
             textBox9.Name = "textBox9";
             textBox9.Size = new Size(112, 50);
             textBox9.TabIndex = 37;
-            textBox9.Text = "3";
-            // 
-            // label21
-            // 
+            textBox9.Text = "1,0";
+
             label21.AutoSize = true;
-            label21.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label21.Location = new Point(1944, 64);
+            label21.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            label21.Location = new Point(1850, 60);
             label21.Name = "label21";
             label21.Size = new Size(78, 45);
             label21.TabIndex = 52;
             label21.Text = "Шаг";
-            // 
-            // textBox14
-            // 
-            textBox14.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            textBox14.Location = new Point(2040, 64);
+
+            textBox14.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            textBox14.Location = new Point(1950, 60);
             textBox14.Name = "textBox14";
             textBox14.Size = new Size(96, 50);
             textBox14.TabIndex = 53;
-            textBox14.Text = "0,1";
-            // 
-            // textBox17
-            // 
-            textBox17.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            textBox17.Location = new Point(1576, 8);
-            textBox17.Name = "textBox17";
-            textBox17.Size = new Size(112, 50);
-            textBox17.TabIndex = 66;
-            textBox17.Text = "1";
-            // 
-            // label19
-            // 
-            label19.AutoSize = true;
-            label19.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label19.Location = new Point(1696, 8);
-            label19.Name = "label19";
-            label19.Size = new Size(140, 45);
-            label19.TabIndex = 82;
-            label19.Text = "Разброс";
-            // 
-            // textBox13
-            // 
-            textBox13.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            textBox13.Location = new Point(1856, 8);
-            textBox13.Name = "textBox13";
-            textBox13.Size = new Size(112, 50);
-            textBox13.TabIndex = 83;
-            textBox13.Text = "0,1";
-            // 
-            // button6
-            // 
-            button6.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            button6.Location = new Point(960, 120);
+            textBox14.Text = "0,01";
+
+            label25.AutoSize = true;
+            label25.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            label25.Location = new Point(2075, 60);
+            label25.Name = "label25";
+            label25.Size = new Size(78, 45);
+            label25.TabIndex = 52;
+            label25.Text = "Разброс, 1/c";
+
+            textBox19.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            textBox19.Location = new Point(2275, 60);
+            textBox19.Name = "textBox19";
+            textBox19.Size = new Size(96, 50);
+            textBox19.TabIndex = 53;
+            textBox19.Text = "0,5";
+
+            button6.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            button6.Location = new Point(750, 120);
             button6.Name = "button6";
-            button6.Size = new Size(1472, 64);
+            button6.Size = new Size(1500, 64);
             button6.TabIndex = 84;
-            button6.Text = "Построить график";
+            button6.Text = "Построить графики";
             button6.UseVisualStyleBackColor = true;
             button6.Click += button6_Click;
-            // 
-            // chart1
-            // 
+
             chartArea1.Name = "ChartArea1";
             chart1.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
             chart1.Legends.Add(legend1);
-            chart1.Location = new Point(968, 192);
+            chart1.Location = new Point(750, 190);
             chart1.Name = "chart1";
             series1.ChartArea = "ChartArea1";
             series1.Legend = "Legend1";
@@ -459,14 +449,12 @@
             chart1.Size = new Size(716, 432);
             chart1.TabIndex = 85;
             chart1.Text = "chart1";
-            // 
-            // chart2
-            // 
+
             chartArea2.Name = "ChartArea1";
             chart2.ChartAreas.Add(chartArea2);
             legend2.Name = "Legend1";
             chart2.Legends.Add(legend2);
-            chart2.Location = new Point(1712, 192);
+            chart2.Location = new Point(1500, 190);
             chart2.Name = "chart2";
             series2.ChartArea = "ChartArea1";
             series2.Legend = "Legend1";
@@ -475,170 +463,146 @@
             chart2.Size = new Size(716, 432);
             chart2.TabIndex = 86;
             chart2.Text = "chart2";
-            // 
-            // label20
-            // 
-            label20.AutoSize = true;
-            label20.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label20.Location = new Point(960, 64);
-            label20.Name = "label20";
-            label20.Size = new Size(577, 45);
-            label20.TabIndex = 89;
-            label20.Text = "Интенсивность обработки заявок, 1/c";
-            // 
-            // label15
-            // 
-            label15.AutoSize = true;
-            label15.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label15.Location = new Point(968, 688);
-            label15.Name = "label15";
-            label15.Size = new Size(577, 45);
-            label15.TabIndex = 103;
-            label15.Text = "Интенсивность обработки заявок, 1/c";
-            // 
-            // button7
-            // 
-            button7.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            button7.Location = new Point(976, 752);
-            button7.Name = "button7";
-            button7.Size = new Size(1464, 64);
-            button7.TabIndex = 100;
-            button7.Text = "Построить график";
-            button7.UseVisualStyleBackColor = true;
-            button7.Click += button7_Click;
-            // 
-            // textBox11
-            // 
-            textBox11.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            textBox11.Location = new Point(2328, 632);
-            textBox11.Name = "textBox11";
-            textBox11.Size = new Size(104, 50);
-            textBox11.TabIndex = 99;
-            textBox11.Text = "0,1";
-            // 
-            // textBox12
-            // 
-            textBox12.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            textBox12.Location = new Point(1560, 688);
-            textBox12.Name = "textBox12";
-            textBox12.Size = new Size(112, 50);
-            textBox12.TabIndex = 97;
-            textBox12.Text = "3";
-            // 
-            // textBox15
-            // 
-            textBox15.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            textBox15.Location = new Point(2072, 632);
-            textBox15.Name = "textBox15";
-            textBox15.Size = new Size(96, 50);
-            textBox15.TabIndex = 96;
-            textBox15.Text = "0,1";
-            // 
-            // label18
-            // 
-            label18.AutoSize = true;
-            label18.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label18.Location = new Point(1976, 632);
-            label18.Name = "label18";
-            label18.Size = new Size(78, 45);
-            label18.TabIndex = 95;
-            label18.Text = "Шаг";
-            // 
-            // textBox16
-            // 
-            textBox16.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            textBox16.Location = new Point(1856, 632);
-            textBox16.Name = "textBox16";
-            textBox16.Size = new Size(112, 50);
-            textBox16.TabIndex = 94;
-            textBox16.Text = "2,9";
-            // 
-            // label22
-            // 
-            label22.AutoSize = true;
-            label22.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label22.Location = new Point(1776, 632);
-            label22.Name = "label22";
-            label22.Size = new Size(61, 45);
-            label22.TabIndex = 93;
-            label22.Text = "До";
-            // 
-            // label23
-            // 
-            label23.AutoSize = true;
-            label23.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label23.Location = new Point(1584, 632);
-            label23.Name = "label23";
-            label23.Size = new Size(57, 45);
-            label23.TabIndex = 92;
-            label23.Text = "От";
-            // 
-            // textBox18
-            // 
-            textBox18.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            textBox18.Location = new Point(1664, 632);
-            textBox18.Name = "textBox18";
-            textBox18.Size = new Size(104, 50);
-            textBox18.TabIndex = 91;
-            textBox18.Text = "0,1";
-            // 
-            // label24
-            // 
+
             label24.AutoSize = true;
-            label24.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label24.Location = new Point(968, 632);
+            label24.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            label24.Location = new Point(750, 632);
             label24.Name = "label24";
             label24.Size = new Size(603, 45);
             label24.TabIndex = 90;
             label24.Text = "Интенсивность поступления заявок, 1/c";
-            // 
-            // label17
-            // 
+
+            label23.AutoSize = true;
+            label23.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            label23.Location = new Point(1375, 632);
+            label23.Name = "label23";
+            label23.Size = new Size(57, 45);
+            label23.TabIndex = 92;
+            label23.Text = "От";
+
+            textBox18.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            textBox18.Location = new Point(1450, 632);
+            textBox18.Name = "textBox18";
+            textBox18.Size = new Size(104, 50);
+            textBox18.TabIndex = 91;
+            textBox18.Text = "0,01";
+
+            label22.AutoSize = true;
+            label22.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            label22.Location = new Point(1600, 632);
+            label22.Name = "label22";
+            label22.Size = new Size(61, 45);
+            label22.TabIndex = 93;
+            label22.Text = "До";
+
+            textBox16.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            textBox16.Location = new Point(1700, 632);
+            textBox16.Name = "textBox16";
+            textBox16.Size = new Size(112, 50);
+            textBox16.TabIndex = 94;
+            textBox16.Text = "0,19";
+
+            label18.AutoSize = true;
+            label18.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            label18.Location = new Point(1850, 632);
+            label18.Name = "label18";
+            label18.Size = new Size(78, 45);
+            label18.TabIndex = 95;
+            label18.Text = "Шаг";
+
+            textBox15.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            textBox15.Location = new Point(1950, 632);
+            textBox15.Name = "textBox15";
+            textBox15.Size = new Size(96, 50);
+            textBox15.TabIndex = 96;
+            textBox15.Text = "0,01";
+
             label17.AutoSize = true;
-            label17.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            label17.Location = new Point(2176, 632);
+            label17.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            label17.Location = new Point(2075, 632);
             label17.Name = "label17";
             label17.Size = new Size(140, 45);
             label17.TabIndex = 98;
-            label17.Text = "Разброс";
-            // 
-            // chart3
-            // 
-            chartArea3.Name = "ChartArea1";
-            chart3.ChartAreas.Add(chartArea3);
-            legend3.Name = "Legend1";
-            chart3.Legends.Add(legend3);
-            chart3.Location = new Point(1720, 824);
-            chart3.Name = "chart3";
-            series3.ChartArea = "ChartArea1";
-            series3.Legend = "Legend1";
-            series3.Name = "Series1";
-            chart3.Series.Add(series3);
-            chart3.Size = new Size(716, 448);
-            chart3.TabIndex = 105;
-            chart3.Text = "chart3";
-            // 
-            // chart4
-            // 
+            label17.Text = "Разброс, 1/с";
+
+            textBox11.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            textBox11.Location = new Point(2275, 632);
+            textBox11.Name = "textBox11";
+            textBox11.Size = new Size(104, 50);
+            textBox11.TabIndex = 99;
+            textBox11.Text = "0,5";
+
+            label15.AutoSize = true;
+            label15.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            label15.Location = new Point(750, 688);
+            label15.Name = "label15";
+            label15.Size = new Size(577, 45);
+            label15.TabIndex = 103;
+            label15.Text = "Интенсивность обработки заявок, 1/c";
+
+            textBox12.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            textBox12.Location = new Point(1375, 688);
+            textBox12.Name = "textBox12";
+            textBox12.Size = new Size(112, 50);
+            textBox12.TabIndex = 97;
+            textBox12.Text = "0,08";
+
+            label26.AutoSize = true;
+            label26.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            label26.Location = new Point(1550, 688);
+            label26.Name = "label26";
+            label26.Size = new Size(78, 45);
+            label26.TabIndex = 52;
+            label26.Text = "Разброс, 1/c";
+
+            textBox20.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            textBox20.Location = new Point(1750, 688);
+            textBox20.Name = "textBox20";
+            textBox20.Size = new Size(96, 50);
+            textBox20.TabIndex = 53;
+            textBox20.Text = "0,5";
+
+            button7.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            button7.Location = new Point(750, 752);
+            button7.Name = "button7";
+            button7.Size = new Size(1500, 64);
+            button7.TabIndex = 100;
+            button7.Text = "Построить графики";
+            button7.UseVisualStyleBackColor = true;
+            button7.Click += button7_Click;
+
             chartArea4.Name = "ChartArea1";
             chart4.ChartAreas.Add(chartArea4);
             legend4.Name = "Legend1";
             chart4.Legends.Add(legend4);
-            chart4.Location = new Point(976, 824);
+            chart4.Location = new Point(750, 824);
             chart4.Name = "chart4";
             series4.ChartArea = "ChartArea1";
             series4.Legend = "Legend1";
             series4.Name = "Series1";
             chart4.Series.Add(series4);
-            chart4.Size = new Size(716, 448);
+            chart4.Size = new Size(716, 420);
             chart4.TabIndex = 104;
             chart4.Text = "chart4";
-            // 
-            // Form1
-            // 
+
+            chartArea3.Name = "ChartArea1";
+            chart3.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            chart3.Legends.Add(legend3);
+            chart3.Location = new Point(1500, 824);
+            chart3.Name = "chart3";
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            chart3.Series.Add(series3);
+            chart3.Size = new Size(716, 420);
+            chart3.TabIndex = 105;
+            chart3.Text = "chart3";
+
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(2440, 1324);
+            
             Controls.Add(chart3);
             Controls.Add(chart4);
             Controls.Add(label15);
@@ -677,32 +641,39 @@
             Controls.Add(textBoxTheorWorkload);
             Controls.Add(label9);
             Controls.Add(btnStartModelling);
-            Controls.Add(textBox3);
-            Controls.Add(label6);
-            Controls.Add(deleteOperator);
-            Controls.Add(label5);
+            Controls.Add(textBoxModellingTime);
+            Controls.Add(labelModellingTime);
+            Controls.Add(btnDeleteOperator);
+            Controls.Add(labelNormal);
             Controls.Add(btnAddOperator);
             Controls.Add(textBoxOperatorMean);
             Controls.Add(labelOperatorMean);
-            Controls.Add(label8);
+            Controls.Add(labelOperator);
             Controls.Add(listOperator);
-            Controls.Add(deleteGenerator);
-            Controls.Add(label4);
+            Controls.Add(btnDeleteGenerator);
+            Controls.Add(labelUniform);
             Controls.Add(textBoxGeneratorDerivation);
-            Controls.Add(label3);
+            Controls.Add(labelGeneratorDerivation);
             Controls.Add(btnAddGenerator);
             Controls.Add(textBoxGeneratorMean);
-            Controls.Add(label2);
+            Controls.Add(labelGeneratorMean);
             Controls.Add(labelGenerator);
             Controls.Add(labelOperatorDerivation);
             Controls.Add(listGenerator);
+            Controls.Add(textBox19);
+            Controls.Add(textBox20);
+            Controls.Add(label25);
+            Controls.Add(label26);
+
             Name = "Form1";
-            Text = "Form1";
+            Text = "Лабораторная работа №1";
             WindowState = FormWindowState.Maximized;
+            
             ((System.ComponentModel.ISupportInitialize)chart1).EndInit();
             ((System.ComponentModel.ISupportInitialize)chart2).EndInit();
             ((System.ComponentModel.ISupportInitialize)chart3).EndInit();
             ((System.ComponentModel.ISupportInitialize)chart4).EndInit();
+            
             ResumeLayout(false);
             PerformLayout();
         }
@@ -712,23 +683,23 @@
         private ListView listGenerator;
         private Label labelGenerator;
         private ContextMenuStrip contextMenuStrip1;
-        private Label label2;
+        private Label labelGeneratorMean;
         private TextBox textBoxGeneratorMean;
         private Button btnAddGenerator;
-        private Label label3;
+        private Label labelGeneratorDerivation;
         private TextBox textBoxGeneratorDerivation;
-        private Label label4;
-        private Button deleteGenerator;
-        private Button deleteOperator;
-        private Label label5;
+        private Label labelUniform;
+        private Button btnDeleteGenerator;
+        private Button btnDeleteOperator;
+        private Label labelNormal;
         private Button btnAddOperator;
         private TextBox textBoxOperatorMean;
         private Label labelOperatorMean;
-        private Label label8;
+        private Label labelOperator;
         private ListView listOperator;
         private Button btnStartModelling;
-        private TextBox textBox3;
-        private Label label6;
+        private TextBox textBoxModellingTime;
+        private Label labelModellingTime;
         private TextBox textBoxTheorWorkload;
         private Label label9;
         private TextBox textBoxActualWorkload;
@@ -762,9 +733,15 @@
         private Label label22;
         private Label label23;
         private TextBox textBox18;
+        private TextBox textBox19;
+        private TextBox textBox20;
+
         private Label label24;
         private Label labelOperatorDerivation;
         private Label label17;
+        private Label label25;
+        private Label label26;
+
         private System.Windows.Forms.DataVisualization.Charting.Chart chart3;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart4;
     }
