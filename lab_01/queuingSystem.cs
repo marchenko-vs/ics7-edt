@@ -37,7 +37,7 @@ namespace queuingSystem
             }
             else
             {
-                throw new ArgumentException("������������ �������� ���������");
+                throw new ArgumentException("EXception");
             }
         }
     }

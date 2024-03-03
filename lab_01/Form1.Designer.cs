@@ -150,7 +150,7 @@
             textBoxGeneratorDerivation.Name = "textBoxGeneratorDerivation";
             textBoxGeneratorDerivation.Size = new Size(176, 40);
             textBoxGeneratorDerivation.TabIndex = 7;
-            textBoxGeneratorDerivation.Text = "0,5";
+            textBoxGeneratorDerivation.Text = "0,02";
 
             btnDeleteGenerator.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
             btnDeleteGenerator.Location = new Point(10, 170);
@@ -205,7 +205,7 @@
             textBoxOperatorMean.Name = "textBoxOperatorMean";
             textBoxOperatorMean.Size = new Size(176, 50);
             textBoxOperatorMean.TabIndex = 13;
-            textBoxOperatorMean.Text = "0,08";
+            textBoxOperatorMean.Text = "0,1";
             
             labelOperatorDerivation.AutoSize = true;
             labelOperatorDerivation.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
@@ -220,7 +220,7 @@
             textBoxOperatorDerivation.Name = "textBoxOperatorDerivation";
             textBoxOperatorDerivation.Size = new Size(176, 50);
             textBoxOperatorDerivation.TabIndex = 7;
-            textBoxOperatorDerivation.Text = "0,5";
+            textBoxOperatorDerivation.Text = "0,02";
 
             btnDeleteOperator.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
             btnDeleteOperator.Location = new Point(10, 620);
@@ -357,7 +357,7 @@
             textBox13.Name = "textBox13";
             textBox13.Size = new Size(112, 50);
             textBox13.TabIndex = 83;
-            textBox13.Text = "0,5";
+            textBox13.Text = "0,02";
 
             label20.AutoSize = true;
             label20.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
@@ -380,7 +380,7 @@
             textBox8.Name = "textBox8";
             textBox8.Size = new Size(104, 50);
             textBox8.TabIndex = 34;
-            textBox8.Text = "0,01";
+            textBox8.Text = "0,1";
 
             label14.AutoSize = true;
             label14.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
@@ -395,7 +395,7 @@
             textBox9.Name = "textBox9";
             textBox9.Size = new Size(112, 50);
             textBox9.TabIndex = 37;
-            textBox9.Text = "1,0";
+            textBox9.Text = "0,2";
 
             label21.AutoSize = true;
             label21.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
@@ -425,7 +425,7 @@
             textBox19.Name = "textBox19";
             textBox19.Size = new Size(96, 50);
             textBox19.TabIndex = 53;
-            textBox19.Text = "0,5";
+            textBox19.Text = "0,05";
 
             button6.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
             button6.Location = new Point(750, 120);
@@ -485,7 +485,7 @@
             textBox18.Name = "textBox18";
             textBox18.Size = new Size(104, 50);
             textBox18.TabIndex = 91;
-            textBox18.Text = "0,01";
+            textBox18.Text = "0,08";
 
             label22.AutoSize = true;
             label22.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
@@ -500,7 +500,7 @@
             textBox16.Name = "textBox16";
             textBox16.Size = new Size(112, 50);
             textBox16.TabIndex = 94;
-            textBox16.Text = "0,19";
+            textBox16.Text = "0,2";
 
             label18.AutoSize = true;
             label18.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
@@ -530,7 +530,7 @@
             textBox11.Name = "textBox11";
             textBox11.Size = new Size(104, 50);
             textBox11.TabIndex = 99;
-            textBox11.Text = "0,5";
+            textBox11.Text = "0,05";
 
             label15.AutoSize = true;
             label15.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
@@ -545,7 +545,7 @@
             textBox12.Name = "textBox12";
             textBox12.Size = new Size(112, 50);
             textBox12.TabIndex = 97;
-            textBox12.Text = "0,08";
+            textBox12.Text = "0,15";
 
             label26.AutoSize = true;
             label26.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
@@ -560,7 +560,7 @@
             textBox20.Name = "textBox20";
             textBox20.Size = new Size(96, 50);
             textBox20.TabIndex = 53;
-            textBox20.Text = "0,5";
+            textBox20.Text = "0,05";
 
             button7.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
             button7.Location = new Point(750, 752);

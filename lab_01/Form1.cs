@@ -19,8 +19,8 @@ namespace queuing_system
             InitializeComponent();
             InitializeListView1();
             InitializeListView2();
-            button6_Click(this, EventArgs.Empty);
-            button7_Click(this, EventArgs.Empty);
+            //button6_Click(this, EventArgs.Empty);
+            //button7_Click(this, EventArgs.Empty);
         }
 
         private void InitializeListView1()
@@ -128,26 +128,32 @@ namespace queuing_system
             List<Generator> generators = new List<Generator>();
             List<Operator> operatingDevices = new List<Operator>();
 
-            double generationIntensity = 0;
+            double generatingIntensity = 0;
             
             foreach (ListViewItem item in listGenerator.Items)
             {
-                generationIntensity += Convert.ToDouble(item.SubItems[0].Text);
+                generatingIntensity += Convert.ToDouble(item.SubItems[0].Text);
 
-                double mean = 1 / Convert.ToDouble(item.SubItems[0].Text);
-                double spread = 1 / Convert.ToDouble(item.SubItems[0].Text);
+                double meanIntensity = Convert.ToDouble(item.SubItems[0].Text);
+                double spreadIntensity = Convert.ToDouble(item.SubItems[1].Text);
+
+                double mean = 1 / meanIntensity;
+                double spread = Math.Abs((1 / (meanIntensity + spreadIntensity)) - (1 / (meanIntensity - spreadIntensity))) / 2;
 
                 generators.Add(new Generator(mean, spread));
             }
 
-            double operatingIntensity = 0;
+            double processingIntensity = 0;
 
             foreach (ListViewItem item in listOperator.Items)
             {
-                operatingIntensity += Convert.ToDouble(item.SubItems[0].Text);
+                processingIntensity += Convert.ToDouble(item.SubItems[0].Text);
 
-                double mean = 1 / Convert.ToDouble(item.SubItems[0].Text);
-                double spread = 1 / Convert.ToDouble(item.SubItems[0].Text);
+                double meanIntensity = Convert.ToDouble(item.SubItems[0].Text);
+                double spreadIntensity = Convert.ToDouble(item.SubItems[1].Text);
+
+                double mean = 1 / meanIntensity;
+                double spread = Math.Abs((1 / (meanIntensity + spreadIntensity)) - (1 / (meanIntensity - spreadIntensity))) / 2;
 
                 operatingDevices.Add(new Operator(mean, spread));
             }
@@ -156,14 +162,14 @@ namespace queuing_system
 
             if (generators.Count == 0 || operatingDevices.Count == 0)
             {
-                MessageBox.Show("Пожалуйста, добавьте генераторы и обслуживающие аппараты");
+                MessageBox.Show("Необходимо добавить генераторы и обслуживающие аппараты.", "Ошибка!");
                 return;
             }
 
             QueuingSystem queuingSystem = new QueuingSystem(generators, operatingDevices);
             queuingSystem.simulate(time);
 
-            double theoreticWorkload = generationIntensity / operatingIntensity;
+            double theoreticWorkload = generatingIntensity / processingIntensity;
             double actualWorkload = 0;
 
             if (queuingSystem.proccessed != 0)
@@ -182,19 +188,23 @@ namespace queuing_system
 
         private void button6_Click(object sender, EventArgs e)
         {
-            double generatorIntensity = readDouble(textBox17);
-            double generatorSpread = readDouble(textBox13);
+            double generatorMeanIntensity = readDouble(textBox17);
+            double generatorSpreadIntensity = readDouble(textBox13);
 
-            double operatingDeviceIntensityMin = readDouble(textBox8);
-            double operatingDeviceIntensityMax = readDouble(textBox9);
-            double operatingDeviceIntensityStep = readDouble(textBox14);
-            double operatingDeviceSpread = readDouble(textBox19);
+            double operatorMeanIntensityMin = readDouble(textBox8);
+            double operatorMeanIntensityMax = readDouble(textBox9);
+            double operatorMeanIntensityStep = readDouble(textBox14);
+            double operatorSpreadIntensity = readDouble(textBox19);
+
+            double generatorMean = 1 / generatorMeanIntensity;
+            double generatorSpread = Math.Abs((1 / (generatorMeanIntensity + generatorSpreadIntensity)) - 
+                (1 / (generatorMeanIntensity - generatorSpreadIntensity))) / 2;
 
             double time = readDouble(textBoxModellingTime);
 
             chart1.Series.Clear();
-            chart1.Series.Add(new Series("operatingIntensity"));
-            chart1.Series["operatingIntensity"].ChartType = SeriesChartType.Line;
+            chart1.Series.Add(new Series("processingIntensity"));
+            chart1.Series["processingIntensity"].ChartType = SeriesChartType.Line;
             chart1.ChartAreas[0].AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
             chart1.ChartAreas[0].AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount;
             chart1.ChartAreas[0].AxisX.Title = "Интенсивность обработки, 1/с";
@@ -210,15 +220,21 @@ namespace queuing_system
             chart2.ChartAreas[0].AxisY.Title = "Время ожидания в очереди, с";
             chart2.Legends.Clear();
 
-            for (double i = operatingDeviceIntensityMin; i <= operatingDeviceIntensityMax; i += operatingDeviceIntensityStep)
+            for (double operatorMeanIntensityCurr = operatorMeanIntensityMin; 
+                 operatorMeanIntensityCurr <= operatorMeanIntensityMax; 
+                 operatorMeanIntensityCurr += operatorMeanIntensityStep)
             {
                 double meanWaitingTime = 0;
                 int iterations = 100;
 
+                double operatorMean = 1 / operatorMeanIntensityCurr;
+                double operatorSpread = Math.Abs((1 / (operatorMeanIntensityCurr + operatorSpreadIntensity)) - 
+                    (1 / (operatorMeanIntensityCurr - generatorSpreadIntensity))) / 2;
+
                 for (int j = 0; j < iterations; ++j)
                 {
-                    Generator generator = new Generator(1 / generatorIntensity, 1 / generatorSpread);
-                    Operator operatingDevice = new Operator(1 / i, 1 / operatingDeviceSpread);
+                    Generator generator = new Generator(generatorMean, generatorSpread);
+                    Operator operatingDevice = new Operator(operatorMean, operatorSpread);
 
                     QueuingSystem queuingSystem = new QueuingSystem(generator, operatingDevice);
 
@@ -226,26 +242,31 @@ namespace queuing_system
                     meanWaitingTime += queuingSystem.meanWaitingTime;
                 }
 
-                chart1.Series["operatingIntensity"].Points.AddXY(i, meanWaitingTime / iterations);
-                chart2.Series["workloadOperatingIntensity"].Points.AddXY(Math.Round(generatorIntensity / i, 3), meanWaitingTime / iterations);
+                chart1.Series["processingIntensity"].Points.AddXY(operatorMeanIntensityCurr, meanWaitingTime / iterations);
+                chart2.Series["workloadOperatingIntensity"].Points.AddXY(Math.Round(generatorMeanIntensity / operatorMeanIntensityCurr, 3), 
+                    meanWaitingTime / iterations);
             }
         }
 
         private void button7_Click(object sender, EventArgs e)
         {
-            double generatorIntensityMin = readDouble(textBox18);
-            double generatorIntensityMax = readDouble(textBox16);
-            double generatorIntensityStep = readDouble(textBox15);
-            double generatorSpread = readDouble(textBox11);
+            double generatorMeanIntensityMin = readDouble(textBox18);
+            double generatorMeanIntensityMax = readDouble(textBox16);
+            double generatorMeanIntensityStep = readDouble(textBox15);
+            double generatorSpreadIntensity = readDouble(textBox11);
 
-            double operatorIntensity = readDouble(textBox12);
-            double operatorIntensitySpread = readDouble(textBox20);
+            double operatorMeanIntensity = readDouble(textBox12);
+            double operatorSpreadIntensity = readDouble(textBox20);
+
+            double operatorMean = 1 / operatorMeanIntensity;
+            double operatorSpread = Math.Abs((1 / (operatorMeanIntensity + operatorSpreadIntensity)) - 
+                (1 / (operatorMeanIntensity - operatorSpreadIntensity))) / 2;
 
             double time = readDouble(textBoxModellingTime);
 
             chart4.Series.Clear();
-            chart4.Series.Add(new Series("generatorIntensity"));
-            chart4.Series["generatorIntensity"].ChartType = SeriesChartType.Line;
+            chart4.Series.Add(new Series("generatorMeanIntensity"));
+            chart4.Series["generatorMeanIntensity"].ChartType = SeriesChartType.Line;
             chart4.ChartAreas[0].AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
             chart4.ChartAreas[0].AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount;
             chart4.ChartAreas[0].AxisX.Title = "Интенсивность поступления, 1/с";
@@ -261,23 +282,30 @@ namespace queuing_system
             chart3.ChartAreas[0].AxisY.Title = "Время ожидания в очереди, с";
             chart3.Legends.Clear();
 
-            for (double i = generatorIntensityMin; i <= generatorIntensityMax; i += generatorIntensityStep)
+            for (double generatorMeanIntensityCurr = generatorMeanIntensityMin; 
+                generatorMeanIntensityCurr <= generatorMeanIntensityMax;
+                generatorMeanIntensityCurr += generatorMeanIntensityStep)
             {
                 double meanWaitingTime = 0;
                 int iterations = 100;
 
+                double generatorMean = 1 / generatorMeanIntensityCurr;
+                double generatorSpread = Math.Abs((1 / (generatorMeanIntensityCurr + generatorSpreadIntensity)) - 
+                    (1 / (generatorMeanIntensityCurr - generatorSpreadIntensity))) / 2;
+
                 for (int j = 0; j < iterations; ++j)
                 {
-                    Generator generator = new Generator(1 / i, 1 / generatorSpread);
-                    Operator operatingDevice = new Operator(1 / operatorIntensity, 1 / operatorIntensitySpread);
+                    Generator generator = new Generator(generatorMean, generatorSpread);
+                    Operator operatingDevice = new Operator(operatorMean, operatorSpread);
 
                     QueuingSystem queuingSystem = new QueuingSystem(generator, operatingDevice);
                     queuingSystem.simulate(time);
                     meanWaitingTime += queuingSystem.meanWaitingTime;
                 }
 
-                chart4.Series["generatorIntensity"].Points.AddXY(i, meanWaitingTime / iterations);
-                chart3.Series["workloadGeneratingIntensity"].Points.AddXY(Math.Round(i / operatorIntensity, 3), meanWaitingTime / iterations);
+                chart4.Series["generatorMeanIntensity"].Points.AddXY(generatorMeanIntensityCurr, meanWaitingTime / iterations);
+                chart3.Series["workloadGeneratingIntensity"].Points.AddXY(Math.Round(generatorMeanIntensityCurr / operatorMeanIntensity, 3), 
+                    meanWaitingTime / iterations);
             }
         }
     }
