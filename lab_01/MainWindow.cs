@@ -1,4 +1,4 @@
-﻿using queuingSystem;
+﻿using QueuingSystem;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,17 +10,17 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
-namespace queuing_system
+namespace QueuingSystem
 {
-    public partial class Form1 : Form
+    public partial class MainWindow : Form
     {
-        public Form1()
+        public MainWindow()
         {
             InitializeComponent();
             InitializeListView1();
             InitializeListView2();
-            //button6_Click(this, EventArgs.Empty);
-            //button7_Click(this, EventArgs.Empty);
+            button6_Click(this, EventArgs.Empty);
+            button7_Click(this, EventArgs.Empty);
         }
 
         private void InitializeListView1()
@@ -77,10 +77,10 @@ namespace queuing_system
         {
             double intensity = readDouble(textBoxGeneratorMean);
             double spread = readDouble(textBoxGeneratorDerivation);
-            
-            ListViewItem item = new(new[] { 
-                Convert.ToString(intensity), 
-                Convert.ToString(spread) 
+
+            ListViewItem item = new(new[] {
+                Convert.ToString(intensity),
+                Convert.ToString(spread)
             });
 
             listGenerator.Items.Add(item);
@@ -94,7 +94,7 @@ namespace queuing_system
             }
             else
             {
-                MessageBox.Show("Пожалуйста, выберите элемент для удаления.");
+                MessageBox.Show("Выберите генератор для удаления.", "Ошибка!");
             }
         }
 
@@ -106,7 +106,7 @@ namespace queuing_system
             }
             else
             {
-                MessageBox.Show("Пожалуйста, выберите элемент для удаления.");
+                MessageBox.Show("Выберите обслуживающий аппарат для удаления.", "Ошибка!");
             }
         }
 
@@ -115,9 +115,9 @@ namespace queuing_system
             double intensity = readDouble(textBoxOperatorMean);
             double spread = readDouble(textBoxOperatorDerivation);
 
-            ListViewItem item = new(new[] { 
-                Convert.ToString(intensity), 
-                Convert.ToString(spread) 
+            ListViewItem item = new(new[] {
+                Convert.ToString(intensity),
+                Convert.ToString(spread)
             });
 
             listOperator.Items.Add(item);
@@ -129,7 +129,7 @@ namespace queuing_system
             List<Operator> operatingDevices = new List<Operator>();
 
             double generatingIntensity = 0;
-            
+
             foreach (ListViewItem item in listGenerator.Items)
             {
                 generatingIntensity += Convert.ToDouble(item.SubItems[0].Text);
@@ -143,11 +143,11 @@ namespace queuing_system
                 generators.Add(new Generator(mean, spread));
             }
 
-            double processingIntensity = 0;
+            double operatorIntensity = 0;
 
             foreach (ListViewItem item in listOperator.Items)
             {
-                processingIntensity += Convert.ToDouble(item.SubItems[0].Text);
+                operatorIntensity += Convert.ToDouble(item.SubItems[0].Text);
 
                 double meanIntensity = Convert.ToDouble(item.SubItems[0].Text);
                 double spreadIntensity = Convert.ToDouble(item.SubItems[1].Text);
@@ -169,7 +169,7 @@ namespace queuing_system
             QueuingSystem queuingSystem = new QueuingSystem(generators, operatingDevices);
             queuingSystem.simulate(time);
 
-            double theoreticWorkload = generatingIntensity / processingIntensity;
+            double theoreticWorkload = generatingIntensity / operatorIntensity;
             double actualWorkload = 0;
 
             if (queuingSystem.proccessed != 0)
@@ -191,44 +191,50 @@ namespace queuing_system
             double generatorMeanIntensity = readDouble(textBox17);
             double generatorSpreadIntensity = readDouble(textBox13);
 
+            MessageBox.Show($"Gen mean {generatorMeanIntensity} gen spread {generatorSpreadIntensity}", "DBG");
+
             double operatorMeanIntensityMin = readDouble(textBox8);
             double operatorMeanIntensityMax = readDouble(textBox9);
             double operatorMeanIntensityStep = readDouble(textBox14);
             double operatorSpreadIntensity = readDouble(textBox19);
 
             double generatorMean = 1 / generatorMeanIntensity;
-            double generatorSpread = Math.Abs((1 / (generatorMeanIntensity + generatorSpreadIntensity)) - 
+            double generatorSpread = Math.Abs((1 / (generatorMeanIntensity + generatorSpreadIntensity)) -
                 (1 / (generatorMeanIntensity - generatorSpreadIntensity))) / 2;
 
             double time = readDouble(textBoxModellingTime);
 
             chart1.Series.Clear();
-            chart1.Series.Add(new Series("processingIntensity"));
-            chart1.Series["processingIntensity"].ChartType = SeriesChartType.Line;
+            chart1.Series.Add(new Series("series1"));
+            chart1.Series["series1"].ChartType = SeriesChartType.Line;
+            chart1.Series["series1"].BorderWidth = 4;
+            chart1.Series["series1"].Color = Color.Red;
             chart1.ChartAreas[0].AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
             chart1.ChartAreas[0].AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount;
             chart1.ChartAreas[0].AxisX.Title = "Интенсивность обработки, 1/с";
-            chart1.ChartAreas[0].AxisY.Title = "Время ожидания в очереди, с";
+            chart1.ChartAreas[0].AxisY.Title = "Время пребывания заявки, с";
             chart1.Legends.Clear();
 
             chart2.Series.Clear();
-            chart2.Series.Add(new Series("workloadOperatingIntensity"));
-            chart2.Series["workloadOperatingIntensity"].ChartType = SeriesChartType.Line;
+            chart2.Series.Add(new Series("series2"));
+            chart2.Series["series2"].ChartType = SeriesChartType.Line;
             chart2.ChartAreas[0].AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
             chart2.ChartAreas[0].AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount;
+            chart2.Series["series2"].BorderWidth = 5;
+            chart2.Series["series2"].Color = Color.Green;
             chart2.ChartAreas[0].AxisX.Title = "Загрузка";
-            chart2.ChartAreas[0].AxisY.Title = "Время ожидания в очереди, с";
+            chart2.ChartAreas[0].AxisY.Title = "Время пребывания заявки, с";
             chart2.Legends.Clear();
 
-            for (double operatorMeanIntensityCurr = operatorMeanIntensityMin; 
-                 operatorMeanIntensityCurr <= operatorMeanIntensityMax; 
+            for (double operatorMeanIntensityCurr = operatorMeanIntensityMin;
+                 operatorMeanIntensityCurr <= operatorMeanIntensityMax;
                  operatorMeanIntensityCurr += operatorMeanIntensityStep)
             {
                 double meanWaitingTime = 0;
                 int iterations = 100;
 
                 double operatorMean = 1 / operatorMeanIntensityCurr;
-                double operatorSpread = Math.Abs((1 / (operatorMeanIntensityCurr + operatorSpreadIntensity)) - 
+                double operatorSpread = Math.Abs((1 / (operatorMeanIntensityCurr + operatorSpreadIntensity)) -
                     (1 / (operatorMeanIntensityCurr - generatorSpreadIntensity))) / 2;
 
                 for (int j = 0; j < iterations; ++j)
@@ -242,8 +248,8 @@ namespace queuing_system
                     meanWaitingTime += queuingSystem.meanWaitingTime;
                 }
 
-                chart1.Series["processingIntensity"].Points.AddXY(operatorMeanIntensityCurr, meanWaitingTime / iterations);
-                chart2.Series["workloadOperatingIntensity"].Points.AddXY(Math.Round(generatorMeanIntensity / operatorMeanIntensityCurr, 3), 
+                chart1.Series["series1"].Points.AddXY(operatorMeanIntensityCurr, meanWaitingTime / iterations);
+                chart2.Series["series2"].Points.AddXY(Math.Round(generatorMeanIntensity / operatorMeanIntensityCurr, 3),
                     meanWaitingTime / iterations);
             }
         }
@@ -259,30 +265,34 @@ namespace queuing_system
             double operatorSpreadIntensity = readDouble(textBox20);
 
             double operatorMean = 1 / operatorMeanIntensity;
-            double operatorSpread = Math.Abs((1 / (operatorMeanIntensity + operatorSpreadIntensity)) - 
+            double operatorSpread = Math.Abs((1 / (operatorMeanIntensity + operatorSpreadIntensity)) -
                 (1 / (operatorMeanIntensity - operatorSpreadIntensity))) / 2;
 
             double time = readDouble(textBoxModellingTime);
 
             chart4.Series.Clear();
-            chart4.Series.Add(new Series("generatorMeanIntensity"));
-            chart4.Series["generatorMeanIntensity"].ChartType = SeriesChartType.Line;
+            chart4.Series.Add(new Series("series4"));
+            chart4.Series["series4"].ChartType = SeriesChartType.Line;
+            chart4.Series["series4"].BorderWidth = 4;
+            chart4.Series["series4"].Color = Color.Red;
             chart4.ChartAreas[0].AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
             chart4.ChartAreas[0].AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount;
             chart4.ChartAreas[0].AxisX.Title = "Интенсивность поступления, 1/с";
-            chart4.ChartAreas[0].AxisY.Title = "Время ожидания в очереди, с";
+            chart4.ChartAreas[0].AxisY.Title = "Время пребывания заявки, с";
             chart4.Legends.Clear();
 
             chart3.Series.Clear();
-            chart3.Series.Add(new Series("workloadGeneratingIntensity"));
-            chart3.Series["workloadGeneratingIntensity"].ChartType = SeriesChartType.Line;
+            chart3.Series.Add(new Series("series3"));
+            chart3.Series["series3"].ChartType = SeriesChartType.Line;
+            chart3.Series["series3"].BorderWidth = 4;
+            chart3.Series["series3"].Color = Color.Green;
             chart3.ChartAreas[0].AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
             chart3.ChartAreas[0].AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount;
             chart3.ChartAreas[0].AxisX.Title = "Загрузка";
-            chart3.ChartAreas[0].AxisY.Title = "Время ожидания в очереди, с";
+            chart3.ChartAreas[0].AxisY.Title = "Время пребывания заявки, с";
             chart3.Legends.Clear();
 
-            for (double generatorMeanIntensityCurr = generatorMeanIntensityMin; 
+            for (double generatorMeanIntensityCurr = generatorMeanIntensityMin;
                 generatorMeanIntensityCurr <= generatorMeanIntensityMax;
                 generatorMeanIntensityCurr += generatorMeanIntensityStep)
             {
@@ -290,7 +300,7 @@ namespace queuing_system
                 int iterations = 100;
 
                 double generatorMean = 1 / generatorMeanIntensityCurr;
-                double generatorSpread = Math.Abs((1 / (generatorMeanIntensityCurr + generatorSpreadIntensity)) - 
+                double generatorSpread = Math.Abs((1 / (generatorMeanIntensityCurr + generatorSpreadIntensity)) -
                     (1 / (generatorMeanIntensityCurr - generatorSpreadIntensity))) / 2;
 
                 for (int j = 0; j < iterations; ++j)
@@ -303,10 +313,15 @@ namespace queuing_system
                     meanWaitingTime += queuingSystem.meanWaitingTime;
                 }
 
-                chart4.Series["generatorMeanIntensity"].Points.AddXY(generatorMeanIntensityCurr, meanWaitingTime / iterations);
-                chart3.Series["workloadGeneratingIntensity"].Points.AddXY(Math.Round(generatorMeanIntensityCurr / operatorMeanIntensity, 3), 
+                chart4.Series["series4"].Points.AddXY(generatorMeanIntensityCurr, meanWaitingTime / iterations);
+                chart3.Series["series3"].Points.AddXY(Math.Round(generatorMeanIntensityCurr / operatorMeanIntensity, 3),
                     meanWaitingTime / iterations);
             }
+        }
+
+        private void chart1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

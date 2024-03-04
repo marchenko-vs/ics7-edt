@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using MathNet.Numerics.Distributions;
 
 
-namespace queuing_system
+namespace QueuingSystem
 {
     public class Generator
     {

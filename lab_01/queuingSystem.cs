@@ -1,4 +1,4 @@
-using queuing_system;
+using QueuingSystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
-namespace queuingSystem
+namespace QueuingSystem
 {
     enum EventType
     {
