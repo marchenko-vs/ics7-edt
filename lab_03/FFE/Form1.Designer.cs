@@ -100,6 +100,10 @@
             label35 = new Label();
             label36 = new Label();
             FFDNonLinearTime = new TextBox();
+            FFDNaturNonLinear = new TextBox();
+            FFDNaturLinear = new TextBox();
+            FENaturNonLinear = new TextBox();
+            FENaturLinear = new TextBox();
             ((System.ComponentModel.ISupportInitialize)FEGridView).BeginInit();
             ((System.ComponentModel.ISupportInitialize)FFDGridView).BeginInit();
             SuspendLayout();
@@ -116,14 +120,14 @@
             // 
             NormLinear.Location = new Point(12, 468);
             NormLinear.Name = "NormLinear";
-            NormLinear.Size = new Size(1741, 23);
+            NormLinear.Size = new Size(874, 23);
             NormLinear.TabIndex = 1;
             // 
             // NormNonLinear
             // 
             NormNonLinear.Location = new Point(12, 497);
             NormNonLinear.Name = "NormNonLinear";
-            NormNonLinear.Size = new Size(1741, 23);
+            NormNonLinear.Size = new Size(874, 23);
             NormNonLinear.TabIndex = 2;
             // 
             // FactTime
@@ -680,14 +684,14 @@
             // 
             FFDNormNonLinear.Location = new Point(12, 555);
             FFDNormNonLinear.Name = "FFDNormNonLinear";
-            FFDNormNonLinear.Size = new Size(1741, 23);
+            FFDNormNonLinear.Size = new Size(874, 23);
             FFDNormNonLinear.TabIndex = 69;
             // 
             // FFDNormLinear
             // 
             FFDNormLinear.Location = new Point(12, 526);
             FFDNormLinear.Name = "FFDNormLinear";
-            FFDNormLinear.Size = new Size(1741, 23);
+            FFDNormLinear.Size = new Size(874, 23);
             FFDNormLinear.TabIndex = 68;
             // 
             // label35
@@ -715,11 +719,43 @@
             FFDNonLinearTime.Size = new Size(132, 23);
             FFDNonLinearTime.TabIndex = 72;
             // 
+            // FFDNaturNonLinear
+            // 
+            FFDNaturNonLinear.Location = new Point(892, 555);
+            FFDNaturNonLinear.Name = "FFDNaturNonLinear";
+            FFDNaturNonLinear.Size = new Size(874, 23);
+            FFDNaturNonLinear.TabIndex = 77;
+            // 
+            // FFDNaturLinear
+            // 
+            FFDNaturLinear.Location = new Point(892, 526);
+            FFDNaturLinear.Name = "FFDNaturLinear";
+            FFDNaturLinear.Size = new Size(874, 23);
+            FFDNaturLinear.TabIndex = 76;
+            // 
+            // FENaturNonLinear
+            // 
+            FENaturNonLinear.Location = new Point(892, 497);
+            FENaturNonLinear.Name = "FENaturNonLinear";
+            FENaturNonLinear.Size = new Size(874, 23);
+            FENaturNonLinear.TabIndex = 75;
+            // 
+            // FENaturLinear
+            // 
+            FENaturLinear.Location = new Point(892, 468);
+            FENaturLinear.Name = "FENaturLinear";
+            FENaturLinear.Size = new Size(874, 23);
+            FENaturLinear.TabIndex = 74;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1765, 999);
+            Controls.Add(FFDNaturNonLinear);
+            Controls.Add(FFDNaturLinear);
+            Controls.Add(FENaturNonLinear);
+            Controls.Add(FENaturLinear);
             Controls.Add(label36);
             Controls.Add(FFDNonLinearTime);
             Controls.Add(label35);
@@ -874,5 +910,9 @@
         private Label label35;
         private Label label36;
         private TextBox FFDNonLinearTime;
+        private TextBox FFDNaturNonLinear;
+        private TextBox FFDNaturLinear;
+        private TextBox FENaturNonLinear;
+        private TextBox FENaturLinear;
     }
 }
