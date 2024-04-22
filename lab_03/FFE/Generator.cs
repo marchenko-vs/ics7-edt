@@ -16,9 +16,8 @@ namespace ConsoleApp1
         {
 
             this.mean = 1 / mean;
-            //this.standardDeviation = this.mean * standardDeviation / mean;
-            //this.standardDeviation = (1 / (standardDeviation));
-            this.standardDeviation = standardDeviation;
+            this.standardDeviation = this.mean * standardDeviation / mean;
+            //this.standardDeviation = standardDeviation;
         }
 
         public double GetTime()

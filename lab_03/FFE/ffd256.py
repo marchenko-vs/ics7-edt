@@ -61,15 +61,6 @@ for i in range(n - 7):
 col_names.insert(0, 'x0')
 matrix = []
 
-flag1 = 0
-flag2 = 0
-flag3 = 0
-flag4 = 0
-flag5 = 0
-flag6 = 0
-flag7 = 0
-flag8 = 0
-
 col = []
 for i in range(256):
     col.append(1)
@@ -378,7 +369,7 @@ for i in range(n + 1, len(col_names)):
 
     matrix.append(new_col)
 
-with open('fe.csv', 'w', encoding='utf-16') as f:
+with open('ffd256.csv', 'w', encoding='utf-16') as f:
     line = 'N,'
     line += ','.join(col_names)
     f.write(f'{line},Y ф.,Y лин.,Y ф. - Y лин.,Y ч.-н.,Y ф. - Y ч.-н.\n')

@@ -61,15 +61,6 @@ for i in range(n - 7):
 col_names.insert(0, 'x0')
 matrix = []
 
-flag1 = 0
-flag2 = 0
-flag3 = 0
-flag4 = 0
-flag5 = 0
-flag6 = 0
-flag7 = 0
-flag8 = 0
-
 col = []
 for i in range(256):
     col.append(1)
@@ -358,11 +349,15 @@ for i in range(2):
 matrix.append(col)
 
 col = []
-for i in range(128):
-    col.append(-1)
-for i in range(128):
-    col.append(1)
+for i in range(256): # x8=x1x2x3x4x5x6x7
+    col.append(matrix[1][i] * matrix[2][i] * matrix[3][i] * matrix[4][i] * 
+               matrix[5][i] * matrix[6][i] * matrix[7][i])
 matrix.append(col)
+
+# col = []
+# for i in range(256): # x8=x1x2
+#     col.append(matrix[1][i] * matrix[2][i])
+# matrix.append(col)
 
 for i in range(n + 1, len(col_names)):
     indices = col_names[i].split('x')
@@ -378,13 +373,13 @@ for i in range(n + 1, len(col_names)):
 
     matrix.append(new_col)
 
-with open('fe.csv', 'w', encoding='utf-16') as f:
+with open('ffd128.csv', 'w', encoding='utf-16') as f:
     line = 'N,'
-    line += ','.join(col_names)
+    line += ','.join(col_names[:128])
     f.write(f'{line},Y ф.,Y лин.,Y ф. - Y лин.,Y ч.-н.,Y ф. - Y ч.-н.\n')
 
-    for i in range(256):
+    for i in range(128):
         line = f'{i + 1},'
-        for j in range(256):
+        for j in range(128):
             line += f'{matrix[j][i]},'
         f.write(f'{line}\n')

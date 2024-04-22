@@ -29,10 +29,12 @@ namespace ConsoleApp1
         public Operator(double mean1, double standardDeviation1, double mean2, double standardDeviation2)
         {
             this.mean1 = 1 / mean1;
-            this.standardDeviation1 = standardDeviation1;
+            //this.standardDeviation1 = standardDeviation1;
+            this.standardDeviation1 = this.mean1 * standardDeviation1 / mean1;
 
             this.mean2 = 1 / mean2;
-            this.standardDeviation2 = standardDeviation2;
+            //this.standardDeviation2 = standardDeviation2;
+            this.standardDeviation2 = this.mean2 * standardDeviation2 / mean2;
         }
 
         public double GetTime()

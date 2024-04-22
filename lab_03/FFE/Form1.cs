@@ -5,15 +5,17 @@ namespace FFE
 {
     public partial class Form1 : Form
     {
-        public List<List<double>> PlanningMatrixFe { get; set; }
+        public List<List<double>> PlanningMatrixFe { get; set; } = new List<List<double>>();
         public List<double> NormalizedCoefficientsFe { get; set; } = new List<double>();
-        public string[][] GridViewMatrixFe { get; set; }
-        public List<string> ColNamesFe { get; set; }
+        public List<double> NaturalCoefficientsFe { get; set; } = new List<double>();
+        public string[][] GridViewMatrixFe { get; set; } = new string[256][];
+        public List<string> ColNamesFe { get; set; } = new List<string>();
 
-        public List<List<double>> PlanningMatrixFfd { get; set; }
+        public List<List<double>> PlanningMatrixFfd { get; set; } = new List<List<double>>();
         public List<double> NormalizedCoefficientsFfd { get; set; } = new List<double>();
-        public string[][] GridViewMatrixFfd { get; set; }
-        public List<string> ColNamesFfd { get; set; }
+        public List<double> NaturalCoefficientsFfd { get; set; } = new List<double>();
+        public string[][] GridViewMatrixFfd { get; set; } = new string[256][];
+        public List<string> ColNamesFfd { get; set; } = new List<string>();
 
         public List<double> MinFactors { get; set; } = new List<double>();
         public List<double> MaxFactors { get; set; } = new List<double>();
@@ -36,10 +38,6 @@ namespace FFE
 
         public void ReadCsvFe(string filename)
         {
-            PlanningMatrixFe = new List<List<double>>();
-            ColNamesFe = new List<string>();
-            GridViewMatrixFe = new string[256][];
-
             using (var reader = new StreamReader(filename))
             {
                 var line = reader.ReadLine();
@@ -67,10 +65,6 @@ namespace FFE
 
         public void ReadCsvFfd(string filename)
         {
-            PlanningMatrixFfd = new List<List<double>>();
-            ColNamesFfd = new List<string>();
-            GridViewMatrixFfd = new string[FFD_N][];
-
             using (var reader = new StreamReader(filename))
             {
                 var line = reader.ReadLine();
@@ -93,6 +87,8 @@ namespace FFE
                     GridViewMatrixFfd[j] = values;
                     ++j;
                 }
+
+                FFD_N = j;
             }
         }
 
@@ -168,16 +164,146 @@ namespace FFE
 
         public void CountNormalizedCoefficientsFe()
         {
-            for (int i = 1; i < 257; ++i)
+            for (int i = 1; i < FE_N + 1; ++i)
             {
                 double coefficient = 0;
 
-                for (int j = 0; j < 256; ++j)
+                for (int j = 0; j < FE_N; ++j)
                 {
-                    coefficient += (PlanningMatrixFe[j][i] * PlanningMatrixFe[j][257]);
+                    coefficient += (PlanningMatrixFe[j][i] * PlanningMatrixFe[j][FE_N + 1]);
                 }
 
-                NormalizedCoefficientsFe.Add(coefficient / 256.0);
+                NormalizedCoefficientsFe.Add(coefficient / FE_N);
+            }
+        }
+
+        public List<double> ExpandFactorsFe(List<double> factors)
+        {
+            List<double> expandedFactors = new List<double>(factors);
+
+            for (int i = 10; i < FE_N + 1; ++i)
+            {
+                var line = ColNamesFe[i];
+                var values = line.Split('x').ToList();
+                double newVal = 1;
+
+                for (int j = 1; j < values.Count; ++j)
+                {
+                    newVal *= factors[Convert.ToInt32(values[j]) - 1];
+                }
+
+                expandedFactors.Add(newVal);
+            }
+
+            return expandedFactors;
+        }
+
+        public List<double> ExpandFactorsFfd(List<double> factors)
+        {
+            List<double> expandedFactors = new List<double>(factors);
+
+            for (int i = 10; i < FFD_N + 1; ++i)
+            {
+                var line = ColNamesFe[i];
+                var values = line.Split('x').ToList();
+                double newVal = 1;
+
+                for (int j = 1; j < values.Count; ++j)
+                {
+                    newVal *= factors[Convert.ToInt32(values[j]) - 1];
+                }
+
+                expandedFactors.Add(newVal);
+            }
+
+            return expandedFactors;
+        }
+
+        public void CountNaturalLinearCoefficientsFe()
+        {
+            double sum = 0;
+
+            for (int i = 1; i < 9; ++i)
+            {
+                sum += (NormalizedCoefficientsFe[i] * (MaxFactors[i - 1] + MinFactors[i - 1]) /
+                    (MaxFactors[i - 1] - MinFactors[i - 1]));
+            }
+
+            NaturalCoefficientsFe.Add(NormalizedCoefficientsFe[0] - sum);
+
+            for (int i = 1; i < 9; ++i)
+            {
+                double naturalCoefficient = (2 * NormalizedCoefficientsFe[i]) /
+                    (MaxFactors[i - 1] - MinFactors[i - 1]);
+
+                NaturalCoefficientsFe.Add(naturalCoefficient);
+            }
+        }
+
+        public void CountNaturalNonLinearCoefficientsFe()
+        {
+            List<double> expandedMinFactors = ExpandFactorsFe(MinFactors);
+            List<double> expandedMaxFactors = ExpandFactorsFe(MaxFactors);
+
+            double sum = 0;
+
+            for (int i = 1; i < 9; ++i)
+            {
+                sum += (NormalizedCoefficientsFe[i] * (expandedMaxFactors[i - 1] + expandedMinFactors[i - 1]) /
+                    (expandedMaxFactors[i - 1] - expandedMinFactors[i - 1]));
+            }
+
+            //NaturalCoefficientsFe[0] = NormalizedCoefficientsFe[0] - sum;
+
+            for (int i = 9; i < FE_N; ++i)
+            {
+                double naturalCoefficient = (2 * NormalizedCoefficientsFe[i]) / 
+                    (expandedMaxFactors[i - 1] - expandedMinFactors[i - 1]);
+
+                NaturalCoefficientsFe.Add(naturalCoefficient);
+            }
+        }
+
+        public void CountNaturalNonLinearCoefficientsFfd()
+        {
+            List<double> expandedMinFactors = ExpandFactorsFfd(MinFactors);
+            List<double> expandedMaxFactors = ExpandFactorsFfd(MaxFactors);
+
+            double sum = 0;
+
+            for (int i = 1; i < 9; ++i)
+            {
+                sum += (NormalizedCoefficientsFfd[i] * (expandedMaxFactors[i - 1] + expandedMinFactors[i - 1]) /
+                    (expandedMaxFactors[i - 1] - expandedMinFactors[i - 1]));
+            }
+
+            NaturalCoefficientsFfd[0] = NormalizedCoefficientsFfd[0] - sum;
+
+            for (int i = 9; i < FFD_N; ++i)
+            {
+                double naturalCoefficient = (2 * NormalizedCoefficientsFfd[i]) /
+                    (expandedMaxFactors[i - 1] - expandedMinFactors[i - 1]);
+
+                NaturalCoefficientsFfd.Add(naturalCoefficient);
+            }
+        }
+
+        public void CountNaturalCoefficientsFfd()
+        {
+            double sum = 0;
+
+            for (int i = 1; i < 9; ++i)
+            {
+                sum += (NormalizedCoefficientsFfd[i] * (MaxFactors[i - 1] + MinFactors[i - 1]) / (MaxFactors[i - 1] - MinFactors[i - 1]));
+            }
+
+            NaturalCoefficientsFfd.Add(NormalizedCoefficientsFfd[0] - sum);
+
+            for (int i = 1; i < 9; ++i)
+            {
+                double naturalCoefficient = (2 * NormalizedCoefficientsFfd[i]) / (MaxFactors[i - 1] - MinFactors[i - 1]);
+
+                NaturalCoefficientsFfd.Add(naturalCoefficient);
             }
         }
 
@@ -192,7 +318,7 @@ namespace FFE
                     coefficient += (PlanningMatrixFfd[j][i] * PlanningMatrixFfd[j][FFD_N + 1]);
                 }
 
-                NormalizedCoefficientsFfd.Add(coefficient / 256.0);
+                NormalizedCoefficientsFfd.Add(coefficient / FFD_N);
             }
         }
 
@@ -248,12 +374,12 @@ namespace FFE
             }
         }
 
-        public double Simulate(List<double> normalizedFactors)
+        public double Simulate(List<double> naturalFactors)
         {
-            Generator gen1 = new Generator(normalizedFactors[1], normalizedFactors[5]);
-            Generator gen2 = new Generator(normalizedFactors[2], normalizedFactors[6]);
-            Operator proc = new Operator(normalizedFactors[3], normalizedFactors[7],
-                                         normalizedFactors[4], normalizedFactors[8]);
+            Generator gen1 = new Generator(naturalFactors[1], naturalFactors[5]);
+            Generator gen2 = new Generator(naturalFactors[2], naturalFactors[6]);
+            Operator proc = new Operator(naturalFactors[3], naturalFactors[7],
+                                         naturalFactors[4], naturalFactors[8]);
             QueuingSystem qs = new QueuingSystem(new List<Generator> { gen1, gen2 }, new List<Operator> { proc });
 
             double res = 0;
@@ -267,13 +393,13 @@ namespace FFE
             return res / 10;
         }
 
-        public double CountNonLinear(List<double> _normalizedFactors)
+        public double CountNonLinearFe(List<double> _normalizedFactors)
         {
             List<double> normalizedFactors = new List<double>(_normalizedFactors);
 
             for (int i = 1; i < normalizedFactors.Count; ++i)
             {
-                normalizedFactors[i] = NormalizedToNatural(MinFactors[i - 1], MaxFactors[i - 1], normalizedFactors[i]);
+                normalizedFactors[i] = NaturalToNormalized(MinFactors[i - 1], MaxFactors[i - 1], normalizedFactors[i]);
             }
 
             double non_linear_time = 0;
@@ -300,13 +426,82 @@ namespace FFE
             return non_linear_time;
         }
 
+        public double CountNaturalLinearFe(List<double> _naturalFactors)
+        {
+            double linear_time = 0;
+
+            for (int i = 0; i < 9; ++i)
+            {
+                linear_time += (NaturalCoefficientsFe[i] * _naturalFactors[i]);
+            }
+
+            return linear_time;
+        }
+
+        public double CountNaturalNonLinearFe(List<double> naturalFactors)
+        {
+            double non_linear_time = 0;
+
+            for (int i = 10; i < FE_N + 1; ++i)
+            {
+                var line = ColNamesFe[i];
+                var values = line.Split('x').ToList();
+                double mul = 1;
+
+                for (int j = 1; j < values.Count; ++j)
+                {
+                    mul *= naturalFactors[Convert.ToInt32(values[j])];
+                }
+
+                naturalFactors.Add(mul);
+            }
+
+            for (int i = 0; i < NaturalCoefficientsFe.Count; ++i)
+            {
+                non_linear_time += (NaturalCoefficientsFe[i] * naturalFactors[i]);
+            }
+
+            return non_linear_time;
+        }
+
+        public double CountNaturalLinearFfd(List<double> _naturalFactors)
+        {
+            double linear_time = 0;
+
+            for (int i = 0; i < 9; ++i)
+            {
+                linear_time += (NaturalCoefficientsFfd[i] * _naturalFactors[i]);
+            }
+
+            return linear_time;
+        }
+
+        public double CountLinearFe(List<double> _normalizedFactors)
+        {
+            List<double> normalizedFactors = new List<double>(_normalizedFactors);
+
+            for (int i = 1; i < normalizedFactors.Count; ++i)
+            {
+                normalizedFactors[i] = NaturalToNormalized(MinFactors[i - 1], MaxFactors[i - 1], normalizedFactors[i]);
+            }
+
+            double non_linear_time = 0;
+
+            for (int i = 0; i < 9; ++i)
+            {
+                non_linear_time += (NormalizedCoefficientsFe[i] * normalizedFactors[i]);
+            }
+
+            return non_linear_time;
+        }
+
         public double CountLinearFfd(List<double> _normalizedFactors)
         {
             List<double> normalizedFactors = new List<double>(_normalizedFactors);
 
             for (int i = 1; i < normalizedFactors.Count; ++i)
             {
-                normalizedFactors[i] = NormalizedToNatural(MinFactors[i - 1], MaxFactors[i - 1], normalizedFactors[i]);
+                normalizedFactors[i] = NaturalToNormalized(MinFactors[i - 1], MaxFactors[i - 1], normalizedFactors[i]);
             }
 
             double non_linear_time = 0;
@@ -325,7 +520,7 @@ namespace FFE
 
             for (int i = 1; i < normalizedFactors.Count; ++i)
             {
-                normalizedFactors[i] = NormalizedToNatural(MinFactors[i - 1], MaxFactors[i - 1], normalizedFactors[i]);
+                normalizedFactors[i] = NaturalToNormalized(MinFactors[i - 1], MaxFactors[i - 1], normalizedFactors[i]);
             }
 
             double non_linear_time = 0;
@@ -355,30 +550,6 @@ namespace FFE
         public Form1()
         {
             InitializeComponent();
-
-            ReadCsvFe(@"D:\bmstu\ics7-edt\lab_03\FFE\fe.csv");
-
-            foreach (var col_name in ColNamesFe!)
-            {
-                FEGridView.Columns.Add(col_name, col_name);
-            }
-
-            foreach (var row in GridViewMatrixFe!)
-            {
-                FEGridView.Rows.Add(row);
-            }
-
-            ReadCsvFfd(@"D:\bmstu\ics7-edt\lab_03\FFE\ffd.csv");
-
-            foreach (var col_name in ColNamesFfd!)
-            {
-                FFDGridView.Columns.Add(col_name, col_name);
-            }
-
-            foreach (var row in GridViewMatrixFfd!)
-            {
-                FFDGridView.Rows.Add(row);
-            }
         }
 
         private void ModelBtn_Click(object sender, EventArgs e)
@@ -387,9 +558,26 @@ namespace FFE
                                                   Convert.ToDouble(Proc1Intensity.Text), Convert.ToDouble(Proc2Intensity.Text),
                                                   Convert.ToDouble(Gen1Var.Text), Convert.ToDouble(Gen2Var.Text),
                                                   Convert.ToDouble(Proc1Var.Text), Convert.ToDouble(Proc2Var.Text)};
-            FactTime.Text = Convert.ToString(Math.Round(Simulate(factors), 3));
-            NonLinearTime.Text = Convert.ToString(Math.Round(CountNonLinear(factors), 3));
-            FFDNonLinearTime.Text = Convert.ToString(Math.Round(CountLinearFfd(factors), 3));
+
+            double factTime = Simulate(factors);
+
+            double feTime = CountNonLinearFe(factors);
+            double feDiff = feTime - factTime;
+            double feSqrDiff = feDiff * feDiff;
+
+            double ffdTime = CountNonLinearFfd(factors);
+            double ffdDiff = ffdTime - factTime;
+            double ffdSqrDiff = ffdDiff * ffdDiff;
+
+            FactTime.Text = Convert.ToString(Math.Round(factTime, 3));
+
+            FENonLinearTime.Text = Convert.ToString(Math.Round(feTime, 3));
+            FEDiff.Text = Convert.ToString(Math.Round(feDiff, 3));
+            FESqrDiff.Text = Convert.ToString(Math.Round(feSqrDiff, 3));
+
+            FFDNonLinearTime.Text = Convert.ToString(Math.Round(ffdTime, 3));
+            FFDDiff.Text = Convert.ToString(Math.Round(ffdDiff, 3));
+            FFDSqrDiff.Text = Convert.ToString(Math.Round(ffdSqrDiff, 3));
         }
 
         private string CreateLinearEquation()
@@ -430,11 +618,49 @@ namespace FFE
             return linear;
         }
 
-        private string CreateNaturalLinearEquationFfd(List<double> coefficients)
+        private string CreateNaturalLinearEquation(List<double> coefficients)
         {
             string linear = "y=";
 
             for (int i = 0; i < 9; ++i)
+            {
+                if (coefficients[i] < 0)
+                {
+                    linear += $"{Math.Round(coefficients[i], 3)}*{ColNamesFfd[i + 1]}";
+                }
+                else
+                {
+                    linear += $"+{Math.Round(coefficients[i], 3)}*{ColNamesFfd[i + 1]}";
+                }
+            }
+
+            return linear;
+        }
+
+        private string CreateNaturalNonLinearEquation(List<double> coefficients)
+        {
+            string linear = "y=";
+
+            for (int i = 0; i < FE_N; ++i)
+            {
+                if (coefficients[i] < 0)
+                {
+                    linear += $"{Math.Round(coefficients[i], 3)}*{ColNamesFe[i + 1]}";
+                }
+                else
+                {
+                    linear += $"+{Math.Round(coefficients[i], 3)}*{ColNamesFe[i + 1]}";
+                }
+            }
+
+            return linear;
+        }
+
+        private string CreateNaturalNonLinearEquationFfd(List<double> coefficients)
+        {
+            string linear = "y=";
+
+            for (int i = 0; i < FFD_N; ++i)
             {
                 if (coefficients[i] < 0)
                 {
@@ -508,7 +734,7 @@ namespace FFE
             return naturalCoefficients;
         }
 
-        private void InitFactors()
+        private void InitLists()
         {
             MinFactors.Clear();
             MinFactors.Add(Convert.ToDouble(X1Min.Text));
@@ -529,37 +755,46 @@ namespace FFE
             MaxFactors.Add(Convert.ToDouble(X6Max.Text));
             MaxFactors.Add(Convert.ToDouble(X7Max.Text));
             MaxFactors.Add(Convert.ToDouble(X8Max.Text));
+
+            PlanningMatrixFe.Clear();
+            PlanningMatrixFfd.Clear();
+
+            NormalizedCoefficientsFe.Clear();
+            NormalizedCoefficientsFfd.Clear();
+
+            NaturalCoefficientsFe.Clear();
+            NaturalCoefficientsFfd.Clear();
         }
 
-        private void FEBtn_Click(object sender, EventArgs e)
+        private void ConductFE()
         {
-            InitFactors();
-
             Experiment();
-            for (int i = 0; i < 256; ++i)
+            for (int i = 0; i < FE_N; ++i)
             {
-                FEGridView.Rows[i].Cells[257].Value = Math.Round(PlanningMatrixFe[i][257], 3);
+                FEGridView.Rows[i].Cells[FE_N + 1].Value = Math.Round(PlanningMatrixFe[i][FE_N + 1], 3);
             }
 
             CountNormalizedCoefficientsFe();
+            CountNaturalLinearCoefficientsFe();
+            //CountNaturalNonLinearCoefficientsFe();
 
             NormLinear.Text = CreateLinearEquation();
             NormNonLinear.Text = CreateNonLinearEquation();
+            FENaturLinear.Text = CreateNaturalLinearEquation(NaturalCoefficientsFe);
+            //FENaturNonLinear.Text = CreateNaturalNonLinearEquation(NaturalCoefficientsFe);
 
             EstimateNormalized();
-            for (int i = 0; i < 256; ++i)
+            for (int i = 0; i < FE_N; ++i)
             {
-                FEGridView.Rows[i].Cells[258].Value = Math.Round(PlanningMatrixFe[i][258], 3);
-                FEGridView.Rows[i].Cells[259].Value = Math.Round(PlanningMatrixFe[i][259], 3);
-                FEGridView.Rows[i].Cells[260].Value = Math.Round(PlanningMatrixFe[i][260], 3);
-                FEGridView.Rows[i].Cells[261].Value = Math.Round(PlanningMatrixFe[i][261], 3);
+                FEGridView.Rows[i].Cells[FE_N + 2].Value = Math.Round(PlanningMatrixFe[i][FE_N + 2], 3);
+                FEGridView.Rows[i].Cells[FE_N + 3].Value = Math.Round(PlanningMatrixFe[i][FE_N + 3], 3);
+                FEGridView.Rows[i].Cells[FE_N + 4].Value = Math.Round(PlanningMatrixFe[i][FE_N + 4], 3);
+                FEGridView.Rows[i].Cells[FE_N + 5].Value = Math.Round(PlanningMatrixFe[i][FE_N + 5], 3);
             }
         }
 
-        private void FFDBtn_Click(object sender, EventArgs e)
+        private void ConductFFD()
         {
-            InitFactors();
-
             ExperimentFfd();
             for (int i = 0; i < FFD_N; ++i)
             {
@@ -567,10 +802,13 @@ namespace FFE
             }
 
             CountNormalizedCoefficientsFfd();
+            CountNaturalCoefficientsFfd();
+            //CountNaturalNonLinearCoefficientsFfd();
 
             FFDNormLinear.Text = CreateLinearEquationFfd();
-            FFDNaturLinear.Text = CreateNaturalLinearEquationFfd(NormalizedToNaturalCoefficients(NormalizedCoefficientsFfd));
             FFDNormNonLinear.Text = CreateNonLinearEquationFfd();
+            FFDNaturLinear.Text = CreateNaturalLinearEquation(NaturalCoefficientsFfd);
+            //FFDNaturNonLinear.Text = CreateNaturalNonLinearEquationFfd(NaturalCoefficientsFfd);
 
             EstimateNormalizedFfd();
             for (int i = 0; i < FFD_N; ++i)
@@ -582,6 +820,52 @@ namespace FFE
             }
         }
 
-        private readonly int FFD_N = 16;
+        private void ReadCsvFiles()
+        {
+            ReadCsvFe(@"D:\bmstu\ics7-edt\lab_03\FFE\fe.csv");
+
+            foreach (var col_name in ColNamesFe!)
+            {
+                FEGridView.Columns.Add(col_name, col_name);
+            }
+
+            foreach (var row in GridViewMatrixFe!)
+            {
+                FEGridView.Rows.Add(row);
+            }
+
+            ReadCsvFfd(@"D:\bmstu\ics7-edt\lab_03\FFE\ffd16.csv");
+
+            foreach (var col_name in ColNamesFfd!)
+            {
+                FFDGridView.Columns.Add(col_name, col_name);
+            }
+
+            foreach (var row in GridViewMatrixFfd!)
+            {
+                if (row != null)
+                {
+                    FFDGridView.Rows.Add(row);
+                }
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            FEGridView.Rows.Clear();
+            FEGridView.Columns.Clear();
+
+            FFDGridView.Rows.Clear();
+            FFDGridView.Columns.Clear();
+
+            InitLists();
+            ReadCsvFiles();
+
+            ConductFE();
+            ConductFFD();
+        }
+
+        private int FFD_N = 16;
+        private readonly int FE_N = 256;
     }
 }
