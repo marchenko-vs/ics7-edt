@@ -30,8 +30,8 @@
         {
             mainGridView = new DataGridView();
             normalizedEquation = new TextBox();
-            factTime = new TextBox();
-            ocpTime = new TextBox();
+            factTimeTextBox = new TextBox();
+            ocpTimeTextBox = new TextBox();
             label1 = new Label();
             label2 = new Label();
             ModelBtn = new Button();
@@ -94,9 +94,9 @@
             naturalEquation = new TextBox();
             button1 = new Button();
             label37 = new Label();
-            ocpDiff = new TextBox();
+            ocpDiffTextBox = new TextBox();
             label38 = new Label();
-            ocpSqrDiff = new TextBox();
+            ocpSqrDiffTextBox = new TextBox();
             groupBox1 = new GroupBox();
             groupBox2 = new GroupBox();
             label42 = new Label();
@@ -120,19 +120,19 @@
             normalizedEquation.Size = new Size(1753, 23);
             normalizedEquation.TabIndex = 2;
             // 
-            // factTime
+            // factTimeTextBox
             // 
-            factTime.Location = new Point(491, 114);
-            factTime.Name = "factTime";
-            factTime.Size = new Size(132, 23);
-            factTime.TabIndex = 3;
+            factTimeTextBox.Location = new Point(491, 114);
+            factTimeTextBox.Name = "factTimeTextBox";
+            factTimeTextBox.Size = new Size(132, 23);
+            factTimeTextBox.TabIndex = 3;
             // 
-            // ocpTime
+            // ocpTimeTextBox
             // 
-            ocpTime.Location = new Point(491, 143);
-            ocpTime.Name = "ocpTime";
-            ocpTime.Size = new Size(132, 23);
-            ocpTime.TabIndex = 4;
+            ocpTimeTextBox.Location = new Point(491, 143);
+            ocpTimeTextBox.Name = "ocpTimeTextBox";
+            ocpTimeTextBox.Size = new Size(132, 23);
+            ocpTimeTextBox.TabIndex = 4;
             // 
             // label1
             // 
@@ -245,7 +245,7 @@
             Proc2Var.Name = "Proc2Var";
             Proc2Var.Size = new Size(132, 23);
             Proc2Var.TabIndex = 22;
-            Proc2Var.Text = "0,5";
+            Proc2Var.Text = "0,25";
             // 
             // label8
             // 
@@ -262,7 +262,7 @@
             Proc1Var.Name = "Proc1Var";
             Proc1Var.Size = new Size(132, 23);
             Proc1Var.TabIndex = 20;
-            Proc1Var.Text = "0,25";
+            Proc1Var.Text = "0,125";
             // 
             // label9
             // 
@@ -296,7 +296,7 @@
             Proc1Intensity.Name = "Proc1Intensity";
             Proc1Intensity.Size = new Size(132, 23);
             Proc1Intensity.TabIndex = 16;
-            Proc1Intensity.Text = "0,95";
+            Proc1Intensity.Text = "1,05";
             // 
             // label11
             // 
@@ -584,7 +584,7 @@
             X8Max.Name = "X8Max";
             X8Max.Size = new Size(132, 23);
             X8Max.TabIndex = 57;
-            X8Max.Text = "0,6";
+            X8Max.Text = "0,3";
             // 
             // X7Max
             // 
@@ -592,7 +592,7 @@
             X7Max.Name = "X7Max";
             X7Max.Size = new Size(132, 23);
             X7Max.TabIndex = 56;
-            X7Max.Text = "0,3";
+            X7Max.Text = "0,15";
             // 
             // X4Max
             // 
@@ -616,7 +616,7 @@
             X8Min.Name = "X8Min";
             X8Min.Size = new Size(132, 23);
             X8Min.TabIndex = 53;
-            X8Min.Text = "0,4";
+            X8Min.Text = "0,2";
             // 
             // X7Min
             // 
@@ -624,7 +624,7 @@
             X7Min.Name = "X7Min";
             X7Min.Size = new Size(132, 23);
             X7Min.TabIndex = 52;
-            X7Min.Text = "0,2";
+            X7Min.Text = "0,1";
             // 
             // X4Min
             // 
@@ -640,7 +640,7 @@
             X3Min.Name = "X3Min";
             X3Min.Size = new Size(132, 23);
             X3Min.TabIndex = 50;
-            X3Min.Text = "0,7";
+            X3Min.Text = "0,9";
             // 
             // naturalEquation
             // 
@@ -668,12 +668,12 @@
             label37.TabIndex = 80;
             label37.Text = "Разность";
             // 
-            // ocpDiff
+            // ocpDiffTextBox
             // 
-            ocpDiff.Location = new Point(491, 174);
-            ocpDiff.Name = "ocpDiff";
-            ocpDiff.Size = new Size(132, 23);
-            ocpDiff.TabIndex = 79;
+            ocpDiffTextBox.Location = new Point(491, 174);
+            ocpDiffTextBox.Name = "ocpDiffTextBox";
+            ocpDiffTextBox.Size = new Size(132, 23);
+            ocpDiffTextBox.TabIndex = 79;
             // 
             // label38
             // 
@@ -684,23 +684,23 @@
             label38.TabIndex = 83;
             label38.Text = "Квадрат разности";
             // 
-            // ocpSqrDiff
+            // ocpSqrDiffTextBox
             // 
-            ocpSqrDiff.Location = new Point(491, 202);
-            ocpSqrDiff.Name = "ocpSqrDiff";
-            ocpSqrDiff.Size = new Size(132, 23);
-            ocpSqrDiff.TabIndex = 82;
+            ocpSqrDiffTextBox.Location = new Point(491, 202);
+            ocpSqrDiffTextBox.Name = "ocpSqrDiffTextBox";
+            ocpSqrDiffTextBox.Size = new Size(132, 23);
+            ocpSqrDiffTextBox.TabIndex = 82;
             // 
             // groupBox1
             // 
             groupBox1.Controls.Add(label38);
-            groupBox1.Controls.Add(factTime);
-            groupBox1.Controls.Add(ocpSqrDiff);
-            groupBox1.Controls.Add(ocpTime);
+            groupBox1.Controls.Add(factTimeTextBox);
+            groupBox1.Controls.Add(ocpSqrDiffTextBox);
+            groupBox1.Controls.Add(ocpTimeTextBox);
             groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(label37);
             groupBox1.Controls.Add(label2);
-            groupBox1.Controls.Add(ocpDiff);
+            groupBox1.Controls.Add(ocpDiffTextBox);
             groupBox1.Location = new Point(630, 638);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(799, 338);
@@ -820,8 +820,8 @@
         private DataGridView mainGridView;
         private TextBox NormLinear;
         private TextBox normalizedEquation;
-        private TextBox factTime;
-        private TextBox ocpTime;
+        private TextBox factTimeTextBox;
+        private TextBox ocpTimeTextBox;
         private Label label1;
         private Label label2;
         private Button ModelBtn;
@@ -889,9 +889,9 @@
         private TextBox FENaturLinear;
         private Button button1;
         private Label label37;
-        private TextBox ocpDiff;
+        private TextBox ocpDiffTextBox;
         private Label label38;
-        private TextBox ocpSqrDiff;
+        private TextBox ocpSqrDiffTextBox;
         private GroupBox groupBox1;
         private GroupBox groupBox2;
         private Label label41;

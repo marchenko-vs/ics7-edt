@@ -18,9 +18,6 @@ n_sum = n_ffd + n_sp + n_c
 a = math.sqrt(n_ffd / n_sum)
 alpha = math.sqrt(0.5 * (math.sqrt(n_ffd * n_sum) - n_ffd))
 
-print(a)
-print(alpha)
-
 for i in range(n - 1):
     for j in range(i + 1, n):
         new_name = f'{col_names[i]}{col_names[j]}'
@@ -166,23 +163,87 @@ col.append(0)
 matrix.append(col)
 
 col = []
-for i in range(n_sum): # x5=x1x2x3
+for i in range(n_ffd): # x5=x1x2x3
     col.append(matrix[1][i] * matrix[2][i] * matrix[3][i])
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(-alpha)
+col.append(alpha)
+for i in range(n_sp - 10):
+    col.append(0)
+col.append(0)
 matrix.append(col)
 
 col = []
-for i in range(n_sum): # x6=x1x2x4
+for i in range(n_ffd): # x6=x1x2x4
     col.append(matrix[1][i] * matrix[2][i] * matrix[4][i])
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(-alpha)
+col.append(alpha)
+for i in range(n_sp - 12):
+    col.append(0)
+col.append(0)
 matrix.append(col)
 
 col = []
-for i in range(n_sum): # x7=x1x3x4
+for i in range(n_ffd): # x7=x1x3x4
     col.append(matrix[1][i] * matrix[3][i] * matrix[4][i])
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(-alpha)
+col.append(alpha)
+for i in range(n_sp - 14):
+    col.append(0)
+col.append(0)
 matrix.append(col)
 
 col = []
-for i in range(n_sum): # x8=x2x3x4
+for i in range(n_ffd): # x8=x2x3x4
     col.append(matrix[2][i] * matrix[3][i] * matrix[4][i])
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(0)
+col.append(-alpha)
+col.append(alpha)
+for i in range(n_sp - 16):
+    col.append(0)
+col.append(0)
 matrix.append(col)
 
 for i in range(n + 1, len(col_names)):

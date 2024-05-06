@@ -114,46 +114,86 @@ namespace FFE
             }
         }
 
-        public List<double> ExpandFactorsFe(List<double> factors)
+        public void CountNaturalCoefficients(List<double> normalizedCoefficients, List<double> minFactors, List<double> maxFactors)
         {
-            List<double> expandedFactors = new List<double>(factors);
+            // b0 - [0], b1 - [1], ..., b12 - [9], ..., b11 - [N_SUM - 8 - 1]
+            double b_0 = normalizedCoefficients[0];
 
-            for (int i = 10; i < N_SUM + 1; ++i)
+            for (int i = 1; i < N + 1; ++i)
             {
-                var line = ColNames[i];
-                var values = line.Split('x').ToList();
-                double newVal = 1;
+                double zero_lvl = (maxFactors[i - 1] + minFactors[i - 1]) / 2.0;
+                double interval = (maxFactors[i - 1] - minFactors[i - 1]) / 2.0;
 
-                for (int j = 1; j < values.Count; ++j)
-                {
-                    newVal *= factors[Convert.ToInt32(values[j]) - 1];
-                }
-
-                expandedFactors.Add(newVal);
+                b_0 -= ((normalizedCoefficients[i] * zero_lvl) / interval);
             }
 
-            return expandedFactors;
-        }
-
-        public List<double> ExpandFactorsFfd(List<double> factors)
-        {
-            List<double> expandedFactors = new List<double>(factors);
-
-            for (int i = 10; i < N_SUM + 1; ++i)
+            for (int i = N + 1; i < N_SUM - N; ++i)
             {
-                var line = ColNames[i];
-                var values = line.Split('x').ToList();
-                double newVal = 1;
+                string colName = ColNames[i + 1];
+                var indices = colName.Split('x');
 
-                for (int j = 1; j < values.Count; ++j)
-                {
-                    newVal *= factors[Convert.ToInt32(values[j]) - 1];
-                }
+                double zero_lvl_1 = (maxFactors[Convert.ToInt32(indices[1]) - 1] + minFactors[Convert.ToInt32(indices[1]) - 1]) / 2.0;
+                double zero_lvl_2 = (maxFactors[Convert.ToInt32(indices[2]) - 1] + minFactors[Convert.ToInt32(indices[2]) - 1]) / 2.0;
+                double interval_1 = (maxFactors[Convert.ToInt32(indices[1]) - 1] - minFactors[Convert.ToInt32(indices[1]) - 1]) / 2.0;
+                double interval_2 = (maxFactors[Convert.ToInt32(indices[2]) - 1] - minFactors[Convert.ToInt32(indices[2]) - 1]) / 2.0;
 
-                expandedFactors.Add(newVal);
+                b_0 -= ((normalizedCoefficients[i] * zero_lvl_1 * zero_lvl_2) / (interval_1 * interval_2));
             }
 
-            return expandedFactors;
+            for (int i = N_SUM - N, j = 0; i < N_SUM; ++i, ++j)
+            {
+                double zero_lvl = (maxFactors[j] + minFactors[j]) / 2.0;
+                double interval = (maxFactors[j] - minFactors[j]) / 2.0;
+
+                b_0 += ((normalizedCoefficients[i] * zero_lvl * zero_lvl) / (interval * interval));
+            }
+
+            NaturalCoefficients.Add(b_0);
+            int index = N + 1;
+
+            for (int i = 1; i < N + 1; ++i)
+            {
+                double interval = (maxFactors[i - 1] - minFactors[i - 1]) / 2.0;
+                double linearCoefficient = NormalizedCoefficients[i] / interval;
+
+                //for (int j = 0; index <= N_SUM - N - 1 && j < N - i; ++j)
+                //{
+                //    double zero_lvl_2 = (maxFactors[i + j] + minFactors[i + j]) / 2.0;
+                //    double interval_2 = (maxFactors[i + j] - minFactors[i + j]) / 2.0;
+
+                //    linearCoefficient -= ((normalizedCoefficients[index++] * zero_lvl_2) / (interval * interval_2));
+                //}
+
+                //for (int k = N_SUM - N, j = 0; k < N_SUM; ++k, ++j)
+                //{
+                //    double zero_lvl_1 = (maxFactors[j] + minFactors[j]) / 2.0;
+                //    double interval_1 = (maxFactors[j] - minFactors[j]) / 2.0;
+
+                //    linearCoefficient -= ((normalizedCoefficients[k] * 2 * zero_lvl_1) / (interval_1 * interval_1));
+                //}
+
+                NaturalCoefficients.Add(linearCoefficient);
+            }
+
+            for (int i = N + 1; i < N_SUM - N; ++i)
+            {
+                string colName = ColNames[i + 1];
+                var indices = colName.Split('x');
+
+                double interval_1 = (maxFactors[Convert.ToInt32(indices[1]) - 1] - minFactors[Convert.ToInt32(indices[1]) - 1]) / 2.0;
+                double interval_2 = (maxFactors[Convert.ToInt32(indices[2]) - 1] - minFactors[Convert.ToInt32(indices[2]) - 1]) / 2.0;
+
+                double nonLinearCoefficient = ((normalizedCoefficients[i]) / (interval_1 * interval_2));
+                NaturalCoefficients.Add(nonLinearCoefficient);
+            }
+
+            for (int i = N_SUM - N, j = 0; i < N_SUM; ++i, ++j)
+            {
+                double interval = (maxFactors[j] - minFactors[j]) / 2.0;
+
+                double sqrCoefficient = ((normalizedCoefficients[i]) / (interval * interval));
+                NaturalCoefficients.Add(sqrCoefficient);
+            }
         }
 
         public void EstimateNormalized()
@@ -174,51 +214,91 @@ namespace FFE
             }
         }
 
-        //public double Simulate(List<double> naturalFactors)
-        //{
-        //    Generator gen1 = new Generator(naturalFactors[1], naturalFactors[5]);
-        //    Generator gen2 = new Generator(naturalFactors[2], naturalFactors[6]);
-        //    Operator proc = new Operator(naturalFactors[3], naturalFactors[7],
-        //                                 naturalFactors[4], naturalFactors[8]);
-        //    QueuingSystem qs = new QueuingSystem(new List<Generator> { gen1, gen2 }, new List<Operator> { proc });
+        private double Simulate(List<double> naturalFactors)
+        {
+            Generator gen1 = new Generator(naturalFactors[1], naturalFactors[5]);
+            Generator gen2 = new Generator(naturalFactors[2], naturalFactors[6]);
+            Operator proc = new Operator(naturalFactors[3], naturalFactors[7],
+                                         naturalFactors[4], naturalFactors[8]);
+            QueuingSystem qs = new QueuingSystem(new List<Generator> { gen1, gen2 }, new List<Operator> { proc });
 
-        //    double res = 0;
+            double res = 0;
 
-        //    for (int j = 0; j < 10; ++j)
-        //    {
-        //        qs.Simulate(100);
-        //        res += qs.meanWaitingTime;
-        //    }
+            for (int j = 0; j < 10; ++j)
+            {
+                qs.Simulate(100);
+                res += qs.meanWaitingTime;
+            }
 
-        //    return res / 10;
-        //}
+            return res / 10;
+        }
+
+        private double CountNormalizedEquation(List<double> naturalFactors)
+        {
+            List<double> normalizedFactors = new List<double>();
+
+            for (int i = 1; i < naturalFactors.Count; ++i)
+            {
+                normalizedFactors.Add(NaturalToNormalized(MinFactors[i - 1], MaxFactors[i - 1], naturalFactors[i]));
+            }
+
+            double res = NormalizedCoefficients[0];
+
+            for (int i = 2; i < N_SUM + 1; ++i)
+            {
+                var line = ColNames[i];
+                var values = line.Split('x').ToList();
+                double newVal = 1;
+
+                for (int j = 1; j < values.Count; ++j)
+                {
+                    newVal *= normalizedFactors[Convert.ToInt32(values[j]) - 1];
+                }
+
+                res += (newVal * NormalizedCoefficients[i - 1]);
+            }
+
+            return res;
+        }
+
+        private double CountNaturalEquation(List<double> naturalFactors)
+        {
+            double res = NaturalCoefficients[0];
+
+            for (int i = 2; i < N_SUM + 1; ++i)
+            {
+                var line = ColNames[i];
+                var values = line.Split('x').ToList();
+                double newVal = 1;
+
+                for (int j = 1; j < values.Count; ++j)
+                {
+                    newVal *= naturalFactors[Convert.ToInt32(values[j]) - 1];
+                }
+
+                res += (newVal * NaturalCoefficients[i - 1]);
+            }
+
+            return res;
+        }
 
         private void ModelBtn_Click(object sender, EventArgs e)
         {
-            //var factors = new List<double>() { 1, Convert.ToDouble(Gen1Intensity.Text), Convert.ToDouble(Gen2Intensity.Text),
-            //                                      Convert.ToDouble(Proc1Intensity.Text), Convert.ToDouble(Proc2Intensity.Text),
-            //                                      Convert.ToDouble(Gen1Var.Text), Convert.ToDouble(Gen2Var.Text),
-            //                                      Convert.ToDouble(Proc1Var.Text), Convert.ToDouble(Proc2Var.Text)};
+            var factors = new List<double>() { 1, Convert.ToDouble(Gen1Intensity.Text), Convert.ToDouble(Gen2Intensity.Text),
+                                                  Convert.ToDouble(Proc1Intensity.Text), Convert.ToDouble(Proc2Intensity.Text),
+                                                  Convert.ToDouble(Gen1Var.Text), Convert.ToDouble(Gen2Var.Text),
+                                                  Convert.ToDouble(Proc1Var.Text), Convert.ToDouble(Proc2Var.Text)};
 
-            //double factTime = Simulate(factors);
+            double factTime = Simulate(factors);
+            double ffdTime = CountNormalizedEquation(factors);
+            double ffdDiff = ffdTime - factTime;
+            double ffdSqrDiff = ffdDiff * ffdDiff;
 
-            //double feTime = CountNonLinearFe(factors);
-            //double feDiff = feTime - factTime;
-            //double feSqrDiff = feDiff * feDiff;
-
-            //double ffdTime = CountNonLinearFfd(factors);
-            //double ffdDiff = ffdTime - factTime;
-            //double ffdSqrDiff = ffdDiff * ffdDiff;
-
-            //FactTime.Text = Convert.ToString(Math.Round(factTime, 3));
-
-            //FENonLinearTime.Text = Convert.ToString(Math.Round(feTime, 3));
-            //FEDiff.Text = Convert.ToString(Math.Round(feDiff, 3));
-            //FESqrDiff.Text = Convert.ToString(Math.Round(feSqrDiff, 3));
-
-            //FFDNonLinearTime.Text = Convert.ToString(Math.Round(ffdTime, 3));
-            //FFDDiff.Text = Convert.ToString(Math.Round(ffdDiff, 3));
-            //FFDSqrDiff.Text = Convert.ToString(Math.Round(ffdSqrDiff, 3));
+            factTimeTextBox.Text = Convert.ToString(Math.Round(factTime, 3));
+            ocpTimeTextBox.Text = Convert.ToString(Math.Round(ffdTime, 3));
+            ocpDiffTextBox.Text = Convert.ToString(Math.Round(ffdDiff, 3));
+            ocpSqrDiffTextBox.Text = Convert.ToString(Math.Round(ffdSqrDiff, 3));
+            //MessageBox.Show($"Natural: {Math.Round(CountNaturalEquation(factors), 3)}");
         }
 
         private string CreateNormalizedEquation()
@@ -234,6 +314,25 @@ namespace FFE
                 else
                 {
                     linear += $"+{Math.Round(NormalizedCoefficients[i], 3)}*{ColNames[i + 1]}";
+                }
+            }
+
+            return linear;
+        }
+
+        private string CreateNaturalEquation()
+        {
+            string linear = "y=";
+
+            for (int i = 0; i < NaturalCoefficients.Count; ++i)
+            {
+                if (NaturalCoefficients[i] < 0)
+                {
+                    linear += $"{Math.Round(NaturalCoefficients[i], 3)}*{ColNames[i + 1]}";
+                }
+                else
+                {
+                    linear += $"+{Math.Round(NaturalCoefficients[i], 3)}*{ColNames[i + 1]}";
                 }
             }
 
@@ -278,10 +377,10 @@ namespace FFE
             }
 
             CountNormalizedCoefficients();
-            //CountNaturalCoefficients();
+            CountNaturalCoefficients(NormalizedCoefficients, MinFactors, MaxFactors);
 
             normalizedEquation.Text = CreateNormalizedEquation();
-            //naturalEquation.Text = CreateNaturalNonLinearEquation(NaturalCoefficients);
+            naturalEquation.Text = CreateNaturalEquation();
 
             EstimateNormalized();
             for (int i = 0; i < N_SUM; ++i)
