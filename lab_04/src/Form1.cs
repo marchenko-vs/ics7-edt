@@ -5,10 +5,20 @@ namespace FFE
 {
     public partial class Form1 : Form
     {
+        private static readonly int N = 8;
+        private static readonly int K = 2;
+        private static readonly int N_FFD = 64;
+        private static readonly int N_SP = 16;
+        private static readonly int N_C = 1;
+        private static readonly int N_SUM = 81;
+        private static readonly int N_COEFF = 45;
+        private static readonly double ALPHA = 2.0001;
+        private static readonly double A = 0.8889;
+
         public List<List<double>> PlanningMatrix { get; set; } = new List<List<double>>();
         public List<double> NormalizedCoefficients { get; set; } = new List<double>();
         public List<double> NaturalCoefficients { get; set; } = new List<double>();
-        public string[][] GridViewMatrix { get; set; } = new string[33][];
+        public string[][] GridViewMatrix { get; set; } = new string[N_SUM][];
         public List<string> ColNames { get; set; } = new List<string>();
 
         public List<double> MinFactors { get; set; } = new List<double>();
@@ -99,24 +109,23 @@ namespace FFE
 
         public void CountNormalizedCoefficients()
         {
-            for (int i = 1; i < N_SUM + 1; ++i)
+            for (int i = 1; i < N_COEFF + 1; ++i)
             {
-                double coefficient = 0.0;
-                double znamenatel = 0.0;
+                double up = 0.0;
+                double down = 0.0;
 
                 for (int j = 0; j < N_SUM; ++j)
                 {
-                    coefficient += (PlanningMatrix[j][i] * PlanningMatrix[j][N_SUM + 1]);
-                    znamenatel += (PlanningMatrix[j][i] * PlanningMatrix[j][i]);
+                    up += (PlanningMatrix[j][i] * PlanningMatrix[j][N_COEFF + 1]);
+                    down += (PlanningMatrix[j][i] * PlanningMatrix[j][i]);
                 }
 
-                NormalizedCoefficients.Add(coefficient / znamenatel);
+                NormalizedCoefficients.Add(up / down);
             }
         }
 
         public void CountNaturalCoefficients(List<double> normalizedCoefficients, List<double> minFactors, List<double> maxFactors)
         {
-            // b0 - [0], b1 - [1], ..., b12 - [9], ..., b11 - [N_SUM - 8 - 1]
             double b_0 = normalizedCoefficients[0];
 
             for (int i = 1; i < N + 1; ++i)
@@ -127,20 +136,21 @@ namespace FFE
                 b_0 -= ((normalizedCoefficients[i] * zero_lvl) / interval);
             }
 
-            for (int i = N + 1; i < N_SUM - N; ++i)
+            for (int i = N + 1; i < N_COEFF - N; ++i)
             {
                 string colName = ColNames[i + 1];
                 var indices = colName.Split('x');
 
                 double zero_lvl_1 = (maxFactors[Convert.ToInt32(indices[1]) - 1] + minFactors[Convert.ToInt32(indices[1]) - 1]) / 2.0;
-                double zero_lvl_2 = (maxFactors[Convert.ToInt32(indices[2]) - 1] + minFactors[Convert.ToInt32(indices[2]) - 1]) / 2.0;
                 double interval_1 = (maxFactors[Convert.ToInt32(indices[1]) - 1] - minFactors[Convert.ToInt32(indices[1]) - 1]) / 2.0;
+
+                double zero_lvl_2 = (maxFactors[Convert.ToInt32(indices[2]) - 1] + minFactors[Convert.ToInt32(indices[2]) - 1]) / 2.0;
                 double interval_2 = (maxFactors[Convert.ToInt32(indices[2]) - 1] - minFactors[Convert.ToInt32(indices[2]) - 1]) / 2.0;
 
-                b_0 -= ((normalizedCoefficients[i] * zero_lvl_1 * zero_lvl_2) / (interval_1 * interval_2));
+                b_0 += ((normalizedCoefficients[i] * zero_lvl_1 * zero_lvl_2) / (interval_1 * interval_2));
             }
 
-            for (int i = N_SUM - N, j = 0; i < N_SUM; ++i, ++j)
+            for (int i = N_COEFF - N, j = 0; i < N_COEFF; ++i, ++j)
             {
                 double zero_lvl = (maxFactors[j] + minFactors[j]) / 2.0;
                 double interval = (maxFactors[j] - minFactors[j]) / 2.0;
@@ -149,33 +159,65 @@ namespace FFE
             }
 
             NaturalCoefficients.Add(b_0);
-            int index = N + 1;
 
-            for (int i = 1; i < N + 1; ++i)
+            //for (int i = 1, k = N + 1; i < N + 1; ++i)
+            //{
+            //    double interval = (maxFactors[i - 1] - minFactors[i - 1]) / 2.0;
+            //    double zero_lvl = (maxFactors[i - 1] + minFactors[i - 1]) / 2.0;
+
+            //    double linearCoefficient = NormalizedCoefficients[i] / interval;
+
+            //    for (int j = i + 1; j < N + 1; ++j)
+            //    {
+            //        double zero_lvl_2 = (maxFactors[j - 1] + minFactors[j - 1]) / 2.0;
+            //        double interval_2 = (maxFactors[j - 1] - minFactors[j - 1]) / 2.0;
+
+            //        linearCoefficient -= ((normalizedCoefficients[k++] * zero_lvl_2) / (interval * interval_2));
+            //    }
+
+            //    linearCoefficient -= ((2 * normalizedCoefficients[N_COEFF - N - 1 + i] * zero_lvl) / (interval * interval));
+
+            //    NaturalCoefficients.Add(linearCoefficient);
+            //}
+
+            for (int i = 1, k = N + 1; i < N + 1; ++i)
             {
                 double interval = (maxFactors[i - 1] - minFactors[i - 1]) / 2.0;
+                double zero_lvl = (maxFactors[i - 1] + minFactors[i - 1]) / 2.0;
+
                 double linearCoefficient = NormalizedCoefficients[i] / interval;
 
-                //for (int j = 0; index <= N_SUM - N - 1 && j < N - i; ++j)
-                //{
-                //    double zero_lvl_2 = (maxFactors[i + j] + minFactors[i + j]) / 2.0;
-                //    double interval_2 = (maxFactors[i + j] - minFactors[i + j]) / 2.0;
+                for (int j = N + 1; j < N_COEFF - N; ++j)
+                {
+                    var line = ColNames[j + 1];
+                    var values = line.Split('x').ToList();
+                    
+                    int index_1 = Convert.ToInt32(values[1]);
+                    int index_2 = Convert.ToInt32(values[2]);
 
-                //    linearCoefficient -= ((normalizedCoefficients[index++] * zero_lvl_2) / (interval * interval_2));
-                //}
+                    if (index_1 == i)
+                    {
+                        double zero_lvl_2 = (maxFactors[index_2 - 1] + minFactors[index_2 - 1]) / 2.0;
+                        double interval_2 = (maxFactors[index_2 - 1] - minFactors[index_2 - 1]) / 2.0;
 
-                //for (int k = N_SUM - N, j = 0; k < N_SUM; ++k, ++j)
-                //{
-                //    double zero_lvl_1 = (maxFactors[j] + minFactors[j]) / 2.0;
-                //    double interval_1 = (maxFactors[j] - minFactors[j]) / 2.0;
+                        linearCoefficient -= ((normalizedCoefficients[j] * zero_lvl_2) / (interval * interval_2));
+                    }
+                    else if (index_2 == i)
+                    {
+                        double zero_lvl_2 = (maxFactors[index_1 - 1] + minFactors[index_1 - 1]) / 2.0;
+                        double interval_2 = (maxFactors[index_1 - 1] - minFactors[index_1 - 1]) / 2.0;
 
-                //    linearCoefficient -= ((normalizedCoefficients[k] * 2 * zero_lvl_1) / (interval_1 * interval_1));
-                //}
+                        linearCoefficient -= ((normalizedCoefficients[j] * zero_lvl_2) / (interval * interval_2));
+                    }
+                }
+
+                linearCoefficient -= ((2 * normalizedCoefficients[N_COEFF - N - 1 + i] * zero_lvl) / (interval * interval));
 
                 NaturalCoefficients.Add(linearCoefficient);
             }
 
-            for (int i = N + 1; i < N_SUM - N; ++i)
+            // non-linear coeffs
+            for (int i = N + 1; i < N_COEFF - N; ++i)
             {
                 string colName = ColNames[i + 1];
                 var indices = colName.Split('x');
@@ -184,10 +226,12 @@ namespace FFE
                 double interval_2 = (maxFactors[Convert.ToInt32(indices[2]) - 1] - minFactors[Convert.ToInt32(indices[2]) - 1]) / 2.0;
 
                 double nonLinearCoefficient = ((normalizedCoefficients[i]) / (interval_1 * interval_2));
+
                 NaturalCoefficients.Add(nonLinearCoefficient);
             }
 
-            for (int i = N_SUM - N, j = 0; i < N_SUM; ++i, ++j)
+            // sqr coeffs
+            for (int i = N_COEFF - N, j = 0; i < N_COEFF; ++i, ++j)
             {
                 double interval = (maxFactors[j] - minFactors[j]) / 2.0;
 
@@ -208,7 +252,7 @@ namespace FFE
                 }
 
                 PlanningMatrix[i].Add(time);
-                double diff = time - PlanningMatrix[i][N_SUM + 1];
+                double diff = time - PlanningMatrix[i][N_COEFF + 1];
                 PlanningMatrix[i].Add(diff);
                 PlanningMatrix[i].Add(diff * diff);
             }
@@ -244,10 +288,11 @@ namespace FFE
 
             double res = NormalizedCoefficients[0];
 
-            for (int i = 2; i < N_SUM + 1; ++i)
+            for (int i = 2; i < N_COEFF + 1; ++i)
             {
                 var line = ColNames[i];
                 var values = line.Split('x').ToList();
+
                 double newVal = 1;
 
                 for (int j = 1; j < values.Count; ++j)
@@ -265,7 +310,7 @@ namespace FFE
         {
             double res = NaturalCoefficients[0];
 
-            for (int i = 2; i < N_SUM + 1; ++i)
+            for (int i = 2; i < N_COEFF + 1; ++i)
             {
                 var line = ColNames[i];
                 var values = line.Split('x').ToList();
@@ -273,7 +318,7 @@ namespace FFE
 
                 for (int j = 1; j < values.Count; ++j)
                 {
-                    newVal *= naturalFactors[Convert.ToInt32(values[j]) - 1];
+                    newVal *= naturalFactors[Convert.ToInt32(values[j])];
                 }
 
                 res += (newVal * NaturalCoefficients[i - 1]);
@@ -294,18 +339,19 @@ namespace FFE
             double ffdDiff = ffdTime - factTime;
             double ffdSqrDiff = ffdDiff * ffdDiff;
 
+            loadingTextBox.Text = Convert.ToString(Math.Round(((factors[1] + factors[2]) / ((factors[3] + factors[4]) / 2.0)), 3));
             factTimeTextBox.Text = Convert.ToString(Math.Round(factTime, 3));
             ocpTimeTextBox.Text = Convert.ToString(Math.Round(ffdTime, 3));
             ocpDiffTextBox.Text = Convert.ToString(Math.Round(ffdDiff, 3));
             ocpSqrDiffTextBox.Text = Convert.ToString(Math.Round(ffdSqrDiff, 3));
-            //MessageBox.Show($"Natural: {Math.Round(CountNaturalEquation(factors), 3)}");
+            ocpTimeNaturalTextBox.Text = Convert.ToString(Math.Round(CountNaturalEquation(factors), 3));
         }
 
         private string CreateNormalizedEquation()
         {
             string linear = "y=";
 
-            for (int i = 0; i < NormalizedCoefficients.Count; ++i)
+            for (int i = 0; i < N_COEFF; ++i)
             {
                 if (NormalizedCoefficients[i] < 0)
                 {
@@ -368,29 +414,6 @@ namespace FFE
             NaturalCoefficients.Clear();
         }
 
-        private void ConductExperiment()
-        {
-            Experiment();
-            for (int i = 0; i < N_SUM; ++i)
-            {
-                mainGridView.Rows[i].Cells[N_SUM + 1].Value = Math.Round(PlanningMatrix[i][N_SUM + 1], 3);
-            }
-
-            CountNormalizedCoefficients();
-            CountNaturalCoefficients(NormalizedCoefficients, MinFactors, MaxFactors);
-
-            normalizedEquation.Text = CreateNormalizedEquation();
-            naturalEquation.Text = CreateNaturalEquation();
-
-            EstimateNormalized();
-            for (int i = 0; i < N_SUM; ++i)
-            {
-                mainGridView.Rows[i].Cells[N_SUM + 2].Value = Math.Round(PlanningMatrix[i][N_SUM + 2], 3);
-                mainGridView.Rows[i].Cells[N_SUM + 3].Value = Math.Round(PlanningMatrix[i][N_SUM + 3], 3);
-                mainGridView.Rows[i].Cells[N_SUM + 4].Value = Math.Round(PlanningMatrix[i][N_SUM + 4], 3);
-            }
-        }
-
         private void ReadCsvFiles()
         {
             ReadCsv(@"D:\bmstu\ics7-edt\lab_04\ocp.csv");
@@ -406,6 +429,35 @@ namespace FFE
             }
         }
 
+        private void ConductExperiment()
+        {
+            Experiment();
+            for (int i = 0; i < N_SUM; ++i)
+            {
+                mainGridView.Rows[i].Cells[N_COEFF + 1].Value = Math.Round(PlanningMatrix[i][N_COEFF + 1], 3);
+            }
+
+            CountNormalizedCoefficients();
+
+            EstimateNormalized();
+            for (int i = 0; i < N_SUM; ++i)
+            {
+                mainGridView.Rows[i].Cells[N_COEFF + 2].Value = Math.Round(PlanningMatrix[i][N_COEFF + 2], 3);
+                mainGridView.Rows[i].Cells[N_COEFF + 3].Value = Math.Round(PlanningMatrix[i][N_COEFF + 3], 3);
+                mainGridView.Rows[i].Cells[N_COEFF + 4].Value = Math.Round(PlanningMatrix[i][N_COEFF + 4], 3);
+            }
+
+            // correct b_0
+            for (int i = 37; i < 44; ++i)
+            {
+                NormalizedCoefficients[0] -= (NormalizedCoefficients[i] * A);
+            }
+
+            CountNaturalCoefficients(NormalizedCoefficients, MinFactors, MaxFactors);
+            normalizedEquation.Text = CreateNormalizedEquation();
+            naturalEquation.Text = CreateNaturalEquation();
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             mainGridView.Rows.Clear();
@@ -416,12 +468,5 @@ namespace FFE
 
             ConductExperiment();
         }
-
-        private readonly int N = 8;
-        private readonly int K = 4;
-        private readonly int N_FFD = 16;
-        private readonly int N_SP = 16;
-        private readonly int N_C = 1;
-        private readonly int N_SUM = 33;
     }
 }

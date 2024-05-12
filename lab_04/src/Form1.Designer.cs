@@ -98,6 +98,10 @@
             label38 = new Label();
             ocpSqrDiffTextBox = new TextBox();
             groupBox1 = new GroupBox();
+            ocpTimeNaturalTextBox = new TextBox();
+            label36 = new Label();
+            loadingTextBox = new TextBox();
+            label35 = new Label();
             groupBox2 = new GroupBox();
             label42 = new Label();
             label43 = new Label();
@@ -122,14 +126,14 @@
             // 
             // factTimeTextBox
             // 
-            factTimeTextBox.Location = new Point(491, 114);
+            factTimeTextBox.Location = new Point(540, 116);
             factTimeTextBox.Name = "factTimeTextBox";
             factTimeTextBox.Size = new Size(132, 23);
             factTimeTextBox.TabIndex = 3;
             // 
             // ocpTimeTextBox
             // 
-            ocpTimeTextBox.Location = new Point(491, 143);
+            ocpTimeTextBox.Location = new Point(540, 186);
             ocpTimeTextBox.Name = "ocpTimeTextBox";
             ocpTimeTextBox.Size = new Size(132, 23);
             ocpTimeTextBox.TabIndex = 4;
@@ -137,7 +141,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(355, 117);
+            label1.Location = new Point(355, 119);
             label1.Name = "label1";
             label1.Size = new Size(115, 15);
             label1.TabIndex = 5;
@@ -146,11 +150,11 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(355, 146);
+            label2.Location = new Point(355, 189);
             label2.Name = "label2";
-            label2.Size = new Size(126, 15);
+            label2.Size = new Size(170, 15);
             label2.TabIndex = 6;
-            label2.Text = "Теоретическое время";
+            label2.Text = "Теоретическое время (норм.)";
             // 
             // ModelBtn
             // 
@@ -177,7 +181,7 @@
             Gen1Intensity.Name = "Gen1Intensity";
             Gen1Intensity.Size = new Size(132, 23);
             Gen1Intensity.TabIndex = 8;
-            Gen1Intensity.Text = "0,2";
+            Gen1Intensity.Text = "0,3";
             // 
             // label4
             // 
@@ -194,7 +198,7 @@
             Gen2Intensity.Name = "Gen2Intensity";
             Gen2Intensity.Size = new Size(132, 23);
             Gen2Intensity.TabIndex = 10;
-            Gen2Intensity.Text = "0,55";
+            Gen2Intensity.Text = "0,5";
             // 
             // label5
             // 
@@ -211,7 +215,7 @@
             Gen1Var.Name = "Gen1Var";
             Gen1Var.Size = new Size(132, 23);
             Gen1Var.TabIndex = 12;
-            Gen1Var.Text = "0,06";
+            Gen1Var.Text = "0,025";
             // 
             // label6
             // 
@@ -228,7 +232,7 @@
             Gen2Var.Name = "Gen2Var";
             Gen2Var.Size = new Size(132, 23);
             Gen2Var.TabIndex = 14;
-            Gen2Var.Text = "0,15";
+            Gen2Var.Text = "0,025";
             // 
             // label7
             // 
@@ -245,7 +249,7 @@
             Proc2Var.Name = "Proc2Var";
             Proc2Var.Size = new Size(132, 23);
             Proc2Var.TabIndex = 22;
-            Proc2Var.Text = "0,25";
+            Proc2Var.Text = "0,025";
             // 
             // label8
             // 
@@ -262,7 +266,7 @@
             Proc1Var.Name = "Proc1Var";
             Proc1Var.Size = new Size(132, 23);
             Proc1Var.TabIndex = 20;
-            Proc1Var.Text = "0,125";
+            Proc1Var.Text = "0,025";
             // 
             // label9
             // 
@@ -279,7 +283,7 @@
             Proc2Intensity.Name = "Proc2Intensity";
             Proc2Intensity.Size = new Size(132, 23);
             Proc2Intensity.TabIndex = 18;
-            Proc2Intensity.Text = "1,35";
+            Proc2Intensity.Text = "1,15";
             // 
             // label10
             // 
@@ -296,7 +300,7 @@
             Proc1Intensity.Name = "Proc1Intensity";
             Proc1Intensity.Size = new Size(132, 23);
             Proc1Intensity.TabIndex = 16;
-            Proc1Intensity.Text = "1,05";
+            Proc1Intensity.Text = "1,1";
             // 
             // label11
             // 
@@ -313,7 +317,7 @@
             X6Max.Name = "X6Max";
             X6Max.Size = new Size(132, 23);
             X6Max.TabIndex = 40;
-            X6Max.Text = "0,2";
+            X6Max.Text = "0,03";
             // 
             // label12
             // 
@@ -330,7 +334,7 @@
             X5Max.Name = "X5Max";
             X5Max.Size = new Size(132, 23);
             X5Max.TabIndex = 38;
-            X5Max.Text = "0,07";
+            X5Max.Text = "0,03";
             // 
             // label13
             // 
@@ -347,7 +351,7 @@
             X2Max.Name = "X2Max";
             X2Max.Size = new Size(132, 23);
             X2Max.TabIndex = 36;
-            X2Max.Text = "0,7";
+            X2Max.Text = "0,6";
             // 
             // label14
             // 
@@ -364,7 +368,7 @@
             X1Max.Name = "X1Max";
             X1Max.Size = new Size(132, 23);
             X1Max.TabIndex = 34;
-            X1Max.Text = "0,3";
+            X1Max.Text = "0,4";
             // 
             // label15
             // 
@@ -381,7 +385,7 @@
             X6Min.Name = "X6Min";
             X6Min.Size = new Size(132, 23);
             X6Min.TabIndex = 32;
-            X6Min.Text = "0,1";
+            X6Min.Text = "0,02";
             // 
             // label16
             // 
@@ -398,7 +402,7 @@
             X5Min.Name = "X5Min";
             X5Min.Size = new Size(132, 23);
             X5Min.TabIndex = 30;
-            X5Min.Text = "0,05";
+            X5Min.Text = "0,02";
             // 
             // label17
             // 
@@ -432,7 +436,7 @@
             X1Min.Name = "X1Min";
             X1Min.Size = new Size(132, 23);
             X1Min.TabIndex = 26;
-            X1Min.Text = "0,1";
+            X1Min.Text = "0,2";
             // 
             // label19
             // 
@@ -584,7 +588,7 @@
             X8Max.Name = "X8Max";
             X8Max.Size = new Size(132, 23);
             X8Max.TabIndex = 57;
-            X8Max.Text = "0,3";
+            X8Max.Text = "0,03";
             // 
             // X7Max
             // 
@@ -592,7 +596,7 @@
             X7Max.Name = "X7Max";
             X7Max.Size = new Size(132, 23);
             X7Max.TabIndex = 56;
-            X7Max.Text = "0,15";
+            X7Max.Text = "0,03";
             // 
             // X4Max
             // 
@@ -608,7 +612,7 @@
             X3Max.Name = "X3Max";
             X3Max.Size = new Size(132, 23);
             X3Max.TabIndex = 54;
-            X3Max.Text = "1,2";
+            X3Max.Text = "1,5";
             // 
             // X8Min
             // 
@@ -616,7 +620,7 @@
             X8Min.Name = "X8Min";
             X8Min.Size = new Size(132, 23);
             X8Min.TabIndex = 53;
-            X8Min.Text = "0,2";
+            X8Min.Text = "0,02";
             // 
             // X7Min
             // 
@@ -624,7 +628,7 @@
             X7Min.Name = "X7Min";
             X7Min.Size = new Size(132, 23);
             X7Min.TabIndex = 52;
-            X7Min.Text = "0,1";
+            X7Min.Text = "0,02";
             // 
             // X4Min
             // 
@@ -632,7 +636,7 @@
             X4Min.Name = "X4Min";
             X4Min.Size = new Size(132, 23);
             X4Min.TabIndex = 51;
-            X4Min.Text = "1,2";
+            X4Min.Text = "0,8";
             // 
             // X3Min
             // 
@@ -640,7 +644,7 @@
             X3Min.Name = "X3Min";
             X3Min.Size = new Size(132, 23);
             X3Min.TabIndex = 50;
-            X3Min.Text = "0,9";
+            X3Min.Text = "0,7";
             // 
             // naturalEquation
             // 
@@ -662,7 +666,7 @@
             // label37
             // 
             label37.AutoSize = true;
-            label37.Location = new Point(355, 177);
+            label37.Location = new Point(355, 220);
             label37.Name = "label37";
             label37.Size = new Size(56, 15);
             label37.TabIndex = 80;
@@ -670,7 +674,7 @@
             // 
             // ocpDiffTextBox
             // 
-            ocpDiffTextBox.Location = new Point(491, 174);
+            ocpDiffTextBox.Location = new Point(540, 217);
             ocpDiffTextBox.Name = "ocpDiffTextBox";
             ocpDiffTextBox.Size = new Size(132, 23);
             ocpDiffTextBox.TabIndex = 79;
@@ -678,7 +682,7 @@
             // label38
             // 
             label38.AutoSize = true;
-            label38.Location = new Point(355, 205);
+            label38.Location = new Point(355, 250);
             label38.Name = "label38";
             label38.Size = new Size(103, 15);
             label38.TabIndex = 83;
@@ -686,13 +690,17 @@
             // 
             // ocpSqrDiffTextBox
             // 
-            ocpSqrDiffTextBox.Location = new Point(491, 202);
+            ocpSqrDiffTextBox.Location = new Point(540, 247);
             ocpSqrDiffTextBox.Name = "ocpSqrDiffTextBox";
             ocpSqrDiffTextBox.Size = new Size(132, 23);
             ocpSqrDiffTextBox.TabIndex = 82;
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(ocpTimeNaturalTextBox);
+            groupBox1.Controls.Add(label36);
+            groupBox1.Controls.Add(loadingTextBox);
+            groupBox1.Controls.Add(label35);
             groupBox1.Controls.Add(label38);
             groupBox1.Controls.Add(factTimeTextBox);
             groupBox1.Controls.Add(ocpSqrDiffTextBox);
@@ -707,6 +715,38 @@
             groupBox1.TabIndex = 85;
             groupBox1.TabStop = false;
             groupBox1.Text = "Сравнение результатов";
+            // 
+            // ocpTimeNaturalTextBox
+            // 
+            ocpTimeNaturalTextBox.Location = new Point(540, 152);
+            ocpTimeNaturalTextBox.Name = "ocpTimeNaturalTextBox";
+            ocpTimeNaturalTextBox.Size = new Size(132, 23);
+            ocpTimeNaturalTextBox.TabIndex = 86;
+            // 
+            // label36
+            // 
+            label36.AutoSize = true;
+            label36.Location = new Point(355, 155);
+            label36.Name = "label36";
+            label36.Size = new Size(171, 15);
+            label36.TabIndex = 87;
+            label36.Text = "Теоретическое время (натур.)";
+            // 
+            // loadingTextBox
+            // 
+            loadingTextBox.Location = new Point(540, 82);
+            loadingTextBox.Name = "loadingTextBox";
+            loadingTextBox.Size = new Size(132, 23);
+            loadingTextBox.TabIndex = 84;
+            // 
+            // label35
+            // 
+            label35.AutoSize = true;
+            label35.Location = new Point(355, 85);
+            label35.Name = "label35";
+            label35.Size = new Size(55, 15);
+            label35.TabIndex = 85;
+            label35.Text = "Загрузка";
             // 
             // groupBox2
             // 
@@ -898,5 +938,9 @@
         private Label label42;
         private Label label43;
         private Label label44;
+        private TextBox loadingTextBox;
+        private Label label35;
+        private TextBox ocpTimeNaturalTextBox;
+        private Label label36;
     }
 }
